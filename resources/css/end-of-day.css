@@ -23,6 +23,39 @@
     border-color: #8B0000;
 }
 
+/* ===== END SHIFT BUTTON ===== */
+.end-shift-btn-report {
+    background: #636e72;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    margin-right: 1rem;
+}
+
+.end-shift-btn-report:hover {
+    background: #2d3436;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.end-shift-btn-report i {
+    font-size: 0.9rem;
+}
+
+.report-actions {
+    display: flex;
+    align-items: center;
+}
+
+
 /* ===== TAB NAVIGATION ===== */
 .eod-tabs {
     display: flex;
@@ -339,4 +372,108 @@
         font-size: 0.78rem;
         padding: 0.6rem 1rem;
     }
+}
+
+/* ===== MODALS ===== */
+.modal-container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1001;
+    width: 90%;
+    max-width: 500px;
+}
+
+.modal-container.active {
+    display: block;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+
+.modal-header {
+    background: #8B0000;
+    color: white;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.modal-close:hover {
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+}
+
+.cancel-button,
+.add-button {
+    padding: 0.6rem 1.5rem;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cancel-button {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.cancel-button:hover {
+    background: #ccc;
+}
+
+.add-button {
+    background: #8B0000;
+    color: white;
+}
+
+.add-button:hover {
+    background: #a00000;
+    transform: translateY(-1px);
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    backdrop-filter: blur(3px);
+}
+
+.overlay.show {
+    display: block;
 }

@@ -14,6 +14,10 @@
                 <p class="text-muted">Daily summary for <strong>{{ \Carbon\Carbon::parse($date)->format('F d, Y') }}</strong></p>
             </div>
             <div class="report-actions">
+                <button class="end-shift-btn-report" id="openEndShift">
+                    <i class="fa-solid fa-moon"></i>
+                    <span>End Shift</span>
+                </button>
                 <form method="GET" action="{{ route('reports.end-of-day') }}" class="eod-date-form">
                     <input type="date" name="date" value="{{ $date }}" class="eod-date-input">
                 </form>
@@ -364,4 +368,38 @@
         </div>
     </div>
 </div>
+
+<!-- END SHIFT MODAL -->
+<div class="modal-container" id="endShiftModal">
+    <div class="modal-content">
+        <div class="modal-header" style="background: #636e72;">
+            <span>🌙 End Shift</span>
+            <button class="modal-close" id="closeEndShift">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p style="margin-bottom:1rem; color:#666; font-size:0.9rem;">
+                Ending the shift will:
+            </p>
+            <ul style="margin-bottom:1rem; color:#555; font-size:0.85rem; padding-left:1.5rem;">
+                <li>Mark all remaining <strong>queued</strong> and <strong>cooking</strong> batches as <span style="color:#dc3545; font-weight:700;">WASTED</span> (reason: "End of shift")</li>
+                <li>Log the shift end time</li>
+            </ul>
+            <div style="background:#f8f9fa; border-radius:10px; padding:1rem; margin-bottom:1rem;">
+                <div style="font-size:0.85rem; font-weight:700; margin-bottom:0.5rem;">Shift Summary ({{ \Carbon\Carbon::parse($date)->format('M d, Y') }})</div>
+                <div style="font-size:0.8rem; color:#666;">
+                    <div>🟡 Queued: <strong>{{ $queuedCount }}</strong></div>
+                    <div>🔥 Cooking: <strong>{{ $cookingCount }}</strong></div>
+                    <div>✅ Done/Served: <strong>{{ $doneCount }}</strong></div>
+                </div>
+            </div>
+            <p style="color:#dc3545; font-size:0.85rem; font-weight:600;">⚠ This action cannot be undone.</p>
+            <div class="form-actions">
+                <button type="button" class="cancel-button" id="cancelEndShift">Cancel</button>
+                <button type="button" class="add-button" id="confirmEndShift" style="background:#636e72;">End Shift</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="overlay" id="overlay"></div>
 @endsection

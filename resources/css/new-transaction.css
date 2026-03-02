@@ -594,6 +594,15 @@
 
 /* ===== PRINT STYLES ===== */
 @media print {
+    @page {
+        margin: 0;
+        size: auto;
+    }
+    body {
+        margin: 0;
+        padding: 0;
+        background: white;
+    }
     body * {
         visibility: hidden;
     }
@@ -606,16 +615,21 @@
         left: 0;
         top: 0;
         width: 100%;
+        min-height: 100vh;
         margin: 0;
-        padding: 0;
+        padding: 2rem;
         transform: none !important;
         max-width: none;
         box-shadow: none;
+        background: white !important;
     }
-    .modal-content {
+    .modal-content.receipt-modal-content {
         box-shadow: none;
         border: none;
         border-radius: 0;
+        width: 100%;
+        max-width: none;
+        margin: 0;
     }
     .modal-close, .receipt-footer-section {
         display: none !important;
@@ -625,12 +639,29 @@
         background: white !important;
         color: black !important;
         border-bottom: 2px solid black;
-        padding-bottom: 5px;
+        padding: 2rem 0;
+    }
+    .receipt-header-section h3 {
+        font-size: 2.5rem;
+    }
+    .receipt-header-section p {
+        font-size: 1.2rem;
     }
     .receipt-body {
         color: black !important;
+        padding: 2rem 0;
+        font-size: 1.2rem;
+    }
+    .receipt-info-row, .receipt-item-row {
+        font-size: 1.2rem;
+        padding: 0.5rem 0;
     }
     .receipt-total-row {
         border-top: 2px solid black;
+        font-size: 1.8rem;
+        padding: 1rem 0;
+    }
+    .receipt-divider {
+        border-top: 2px dashed black;
     }
 }

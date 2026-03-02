@@ -240,13 +240,29 @@ class IngredientController extends Controller
         DB::beginTransaction();
         try {
             $product = \App\Models\Product::lockForUpdate()->findOrFail($validated['product_id']);
+            $oldStock = $product->stock;
             $product->increment('stock', $validated['quantity']);
+
+            // ADD AUDIT LOG
+            \App\Models\IngredientAuditLog::create([
+                'user_id' => \Illuminate\Support\Facades\Auth::id(),
+                'ingredient_id' => null, // It's a product
+                'action' => 'stock_in',
+                'ingredient_name' => $product->name . ' (Product)',
+                'unit_cost' => $product->price,
+                'total_cost' => $product->price * $validated['quantity'],
+                'quantity_changed' => $validated['quantity'],
+                'old_stock' => $oldStock,
+                'new_stock' => $oldStock + $validated['quantity'],
+                'supplier' => 'Product Stock In',
+            ]);
+
             DB::commit();
             
             return redirect()->back()->with('success', 'Product stock updated! Added ' . $validated['quantity'] . ' to ' . $product->name);
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->withErrors(['error' => 'Product stock update failed.']);
+            return redirect()->back()->withErrors(['error' => 'Product stock update failed: ' . $e->getMessage()]);
         }
     }
 

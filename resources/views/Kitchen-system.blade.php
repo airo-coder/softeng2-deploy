@@ -18,10 +18,7 @@
                     <i class="fa-solid fa-sun"></i>
                     <span>Start Shift</span>
                 </button>
-                <button class="action-button end-shift-btn" id="openEndShift">
-                    <i class="fa-solid fa-moon"></i>
-                    <span>End Shift</span>
-                </button>
+
                 <button class="action-button recipe-manager-btn" id="openRecipeManager">
                     <i class="fa-solid fa-book"></i>
                     <span>Recipe Manager</span>
@@ -307,37 +304,7 @@
     </div>
 </div>
 
-<!-- END SHIFT MODAL -->
-<div class="modal-container" id="endShiftModal">
-    <div class="modal-content">
-        <div class="modal-header" style="background: #636e72;">
-            <span>🌙 End Shift</span>
-            <button class="modal-close" id="closeEndShift">&times;</button>
-        </div>
-        <div class="modal-body">
-            <p style="margin-bottom:1rem; color:#666; font-size:0.9rem;">
-                Ending the shift will:
-            </p>
-            <ul style="margin-bottom:1rem; color:#555; font-size:0.85rem; padding-left:1.5rem;">
-                <li>Mark all remaining <strong>queued</strong> and <strong>cooking</strong> batches as <span style="color:#dc3545; font-weight:700;">WASTED</span> (reason: "End of shift")</li>
-                <li>Log the shift end time</li>
-            </ul>
-            <div style="background:#f8f9fa; border-radius:10px; padding:1rem; margin-bottom:1rem;">
-                <div style="font-size:0.85rem; font-weight:700; margin-bottom:0.5rem;">Today's Summary</div>
-                <div style="font-size:0.8rem; color:#666;">
-                    <div>🟡 Queued: <strong>{{ count($queued) }}</strong></div>
-                    <div>🔥 Cooking: <strong>{{ count($cooking) }}</strong></div>
-                    <div>✅ Done/Served: <strong>{{ count($done) }}</strong></div>
-                </div>
-            </div>
-            <p style="color:#dc3545; font-size:0.85rem; font-weight:600;">⚠ This action cannot be undone.</p>
-            <div class="form-actions">
-                <button type="button" class="cancel-button" id="cancelEndShift">Cancel</button>
-                <button type="button" class="add-button" id="confirmEndShift" style="background:#636e72;">End Shift</button>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 <div class="overlay" id="overlay"></div>
 

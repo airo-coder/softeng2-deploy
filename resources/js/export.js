@@ -57,7 +57,8 @@ function exportTableToCSV(filename) {
 // Auto-wire export buttons when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     // Wire all export buttons by looking for common selectors
-    const exportButtons = document.querySelectorAll('.export-sales-data-container button, .export-btn, .export-audit-log-button');
+    const exportButtons = document.querySelectorAll('.export-sales-data-container button, .export-btn, .export-audit-log-button, .export-sales-data-button');
+
     exportButtons.forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();

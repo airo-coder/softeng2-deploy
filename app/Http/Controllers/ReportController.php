@@ -281,6 +281,12 @@ class ReportController extends Controller
             ->get()
             ->keyBy('status');
 
+        // Counts for End Shift modal
+        $queuedCount = KitchenProductionLog::whereDate('created_at', $date)->where('status', 'queued')->count();
+        $cookingCount = KitchenProductionLog::whereDate('created_at', $date)->where('status', 'cooking')->count();
+        $doneCount = KitchenProductionLog::whereDate('created_at', $date)->whereIn('status', ['done', 'served'])->count();
+
+
         $dayIngredientCost = ($dayCosts->get('served')->total_cost ?? 0) + ($dayCosts->get('done')->total_cost ?? 0);
         $dayWasteCost = $dayCosts->get('wasted')->total_cost ?? 0;
 
@@ -292,7 +298,9 @@ class ReportController extends Controller
             'posSales', 'posTotalQty', 'posTotalRevenue',
             'servedLogs', 'wastedLogs',
             'stockIns', 'stockOuts', 'totalStockInCost', 'totalStockOutCost',
-            'dayIngredientCost', 'dayWasteCost', 'dayTotalCosts', 'dayNetProfit'
+            'dayIngredientCost', 'dayWasteCost', 'dayTotalCosts', 'dayNetProfit',
+            'queuedCount', 'cookingCount', 'doneCount'
         ));
+
     }
 }
