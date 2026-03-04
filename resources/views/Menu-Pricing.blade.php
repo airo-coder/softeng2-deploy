@@ -145,7 +145,7 @@
             <div class="floating-add-item-image-container">
                 <div class="image-wrapper">
                     <label>Image</label>
-                    <div class="file-upload-area" id="uploadArea">
+                    <div class="file-upload-area" id="addUploadArea">
                         <div class="upload-icon">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path
@@ -154,10 +154,10 @@
                             </svg>
                         </div>
                         <div class="upload-text">Drag file to this area to upload or click "Choose File" button</div>
-                        <div class="file-name" id="fileName"></div>
+                        <div class="file-name" id="addFileName"></div>
                     </div>
                 </div>
-                <input class="choose-file-button" type="file" id="fileInput" name="image" accept="image/*">
+                <input class="choose-file-button" type="file" id="addFileInput" name="image" accept="image/*">
             </div>
             <!-- ADD ITEM CONTROLS -->
             <div class="floating-add-item-options">
@@ -203,7 +203,7 @@
             <div class="floating-add-item-image-container">
                 <div class="image-wrapper">
                     <label>Image</label>
-                    <div class="file-upload-area" id="uploadArea">
+                    <div class="file-upload-area" id="editUploadArea">
                         <div class="upload-icon">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path
@@ -212,10 +212,10 @@
                             </svg>
                         </div>
                         <div class="upload-text">Drag file to this area to upload or click "Choose File" button</div>
-                        <div class="file-name" id="fileName"></div>
+                        <div class="file-name" id="editFileName"></div>
                     </div>
                 </div>
-                <input class="choose-file-button" type="file" id="fileInput" name="image" accept="image/*">
+                <input class="choose-file-button" type="file" id="editFileInput" name="image" accept="image/*">
             </div>
             <!-- EDIT ITEM CONTROLS -->
             <div class="floating-edit-item-options">

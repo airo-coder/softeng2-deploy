@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const overlay = document.getElementById('overlay');
     const checkoutModal = document.getElementById('checkoutModal');
     const receiptModal = document.getElementById('receiptModal');
+    let shouldReload = false;
+
 
     let cart = []; // { id, name, price, quantity }
 
@@ -13,6 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
         checkoutModal?.classList.remove('active');
         receiptModal?.classList.remove('active');
         closeOverlay();
+        if (shouldReload) {
+            window.location.reload();
+        }
     }
 
     // ===== PRODUCT CARDS: Add to cart =====
@@ -181,10 +186,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await res.json();
 
             if (res.ok && data.success) {
-                closeAll();
+                closeOverlay();
+                checkoutModal?.classList.remove('active');
                 showReceipt(data);
                 cart = [];
                 renderCart();
+                shouldReload = true;
             } else {
                 errorDiv.textContent = data.error || 'Checkout failed.';
                 errorDiv.style.display = 'block';

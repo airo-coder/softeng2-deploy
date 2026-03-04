@@ -57,8 +57,8 @@
 
                 <!-- BUTTON CONTAINER -->
                 <div class="button-container">
-                    <button class="record-stock-in-button">Record Stock In</button>
-                    <button class="record-stock-out-button" id="openStockOut">Stock Out</button>
+                    <button class="record-stock-in-button">Ingredient Stock In</button>
+                    <button class="record-stock-out-button" id="openStockOut">Ingredient Stock Out</button>
                     <button class="record-product-stock-in-button">Product Stock In</button>
                     <button class="add-ingredient-button">Add Ingredient</button>
                 </div>
@@ -277,7 +277,7 @@
                 </div>
                 <div class="floating-add-item-options">
                     <button type="button" class="cancel-button" id="stock-in-cancel-button">Cancel</button>
-                    <button type="submit" class="add-button">Update Ingredient Stock</button>
+                    <button type="submit" class="add-button">Confirm  Stock In</button>
                 </div>
             </form>
         </div>

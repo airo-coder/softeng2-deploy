@@ -48,27 +48,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.querySelectorAll('.waste-button').forEach(btn => {
         btn.addEventListener('click', () => {
-             const { id, name } = btn.dataset;
-             wasteForm.action = `/products/${id}/waste`;
-             wasteName.textContent = name;
-             wasteModal.style.display = 'flex';
-             // If overlay is separate from modal container:
-             if(overlay) overlay.classList.add('show');
+            const { id, name } = btn.dataset;
+            wasteForm.action = `/products/${id}/waste`;
+            wasteName.textContent = name;
+            wasteModal.style.display = 'flex';
+            // If overlay is separate from modal container:
+            if (overlay) overlay.classList.add('show');
         });
     });
 
     document.getElementById('closeWasteStock')?.addEventListener('click', () => {
         wasteModal.style.display = 'none';
-        if(overlay) overlay.classList.remove('show');
+        if (overlay) overlay.classList.remove('show');
     });
 
     document.getElementById('cancelWasteStock')?.addEventListener('click', () => {
         wasteModal.style.display = 'none';
-        if(overlay) overlay.classList.remove('show');
+        if (overlay) overlay.classList.remove('show');
     });
 
     // Close waste modal on overlay click (if using shared overlay)
-    if(overlay) {
+    if (overlay) {
         overlay.addEventListener('click', () => {
             wasteModal.style.display = 'none';
         });
@@ -87,10 +87,47 @@ document.addEventListener("DOMContentLoaded", () => {
             overlay.classList.remove("show");
         });
     });
-    // FILE INPUT FUNCTIONALITY
-    if (chooseFileBtn && fileInput) {
-        chooseFileBtn.addEventListener("click", () => fileInput.click());
+    // FILE INPUT & DRAG AND DROP FUNCTIONALITY
+    function setupDragAndDrop(areaId, inputId, nameId) {
+        const area = document.getElementById(areaId);
+        const input = document.getElementById(inputId);
+        const nameDisplay = document.getElementById(nameId);
+
+        if (!area || !input || !nameDisplay) return;
+
+        area.addEventListener("click", () => input.click());
+
+        input.addEventListener("change", () => {
+            if (input.files.length > 0) {
+                nameDisplay.textContent = input.files[0].name;
+            }
+        });
+
+        area.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            area.style.borderColor = "#8B0000";
+            area.style.background = "#fff5f5";
+        });
+
+        area.addEventListener("dragleave", () => {
+            area.style.borderColor = "#ccc";
+            area.style.background = "transparent";
+        });
+
+        area.addEventListener("drop", (e) => {
+            e.preventDefault();
+            area.style.borderColor = "#ccc";
+            area.style.background = "transparent";
+
+            if (e.dataTransfer.files.length > 0) {
+                input.files = e.dataTransfer.files;
+                nameDisplay.textContent = e.dataTransfer.files[0].name;
+            }
+        });
     }
+
+    setupDragAndDrop("addUploadArea", "addFileInput", "addFileName");
+    setupDragAndDrop("editUploadArea", "editFileInput", "editFileName");
 
     // FLOATING ADD ITEM EDIT BUTTON FUNCTIONALITY
     document.querySelectorAll(".edit-button").forEach((btn) => {

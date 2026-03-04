@@ -20,6 +20,8 @@
                     
                     <div class="filter-dropdown" id="filterDropdown" style="display: none;">
                         <form method="GET" action="{{ route('pricing-history') }}" class="filter-dropdown-form">
+                            @if(request('search')) <input type="hidden" name="search" value="{{ request('search') }}"> @endif
+                            @if(request('date')) <input type="hidden" name="date" value="{{ request('date') }}"> @endif
                             {{-- Action filter --}}
                             <div class="filter-group">
                                 <label>Action</label>
@@ -50,6 +52,9 @@
 
                 <!-- SEARCH -->
                 <form method="GET" action="{{ route('pricing-history') }}">
+                    @if(request('action')) <input type="hidden" name="action" value="{{ request('action') }}"> @endif
+                    @if(request('user_id')) <input type="hidden" name="user_id" value="{{ request('user_id') }}"> @endif
+                    @if(request('date')) <input type="hidden" name="date" value="{{ request('date') }}"> @endif
                     <input type="text" name="search" class="search-input" placeholder="Search by product name"
                         value="{{ request('search') }}">
                 </form>
@@ -57,7 +62,9 @@
                 <!-- DATE FILTER -->
                 <div class="date-container">
                     <form method="GET" action="{{ route('pricing-history') }}">
-                        <input type="hidden" name="search" value="{{ request('search') }}">
+                        @if(request('search')) <input type="hidden" name="search" value="{{ request('search') }}"> @endif
+                        @if(request('action')) <input type="hidden" name="action" value="{{ request('action') }}"> @endif
+                        @if(request('user_id')) <input type="hidden" name="user_id" value="{{ request('user_id') }}"> @endif
                         <input
                             type="date"
                             name="date"
@@ -116,6 +123,31 @@
                                     };
                                 @endphp
                                 <span class="badge {{ $badgeClass }}">{{ ucfirst($log->action) }}</span>
+                                
+                                @if($log->action === 'edited' && $log->old_values && $log->new_values)
+                                    <div class="change-details" style="font-size: 0.75rem; color: #636e72; margin-top: 0.4rem; font-weight: normal; line-height: 1.4;">
+                                        @php
+                                            $changes = [];
+                                            $old = $log->old_values;
+                                            $new = $log->new_values;
+                                            
+                                            if (($old['name'] ?? null) !== ($new['name'] ?? null)) 
+                                                $changes[] = 'Name: ' . ($old['name'] ?? 'N/A') . ' → ' . ($new['name'] ?? 'N/A');
+                                            
+                                            if (($old['category'] ?? null) !== ($new['category'] ?? null)) 
+                                                $changes[] = 'Category: ' . ucfirst($old['category'] ?? 'N/A') . ' → ' . ucfirst($new['category'] ?? 'N/A');
+                                            
+                                            if ((float)($old['price'] ?? 0) !== (float)($new['price'] ?? 0)) 
+                                                $changes[] = 'Price: ₱' . number_format($old['price'] ?? 0, 2) . ' → ₱' . number_format($new['price'] ?? 0, 2);
+                                            
+                                            if (($old['image'] ?? null) !== ($new['image'] ?? null)) 
+                                                $changes[] = 'Photo updated';
+                                        @endphp
+                                        @foreach($changes as $change)
+                                            <div><i class="bi bi-dot"></i> {{ $change }}</div>
+                                        @endforeach
+                                    </div>
+                                @endif
                             </td>
                             <td>{{ $log->created_at->format('m/d/Y h:i A') }}</td>
                             <td>

@@ -420,7 +420,7 @@
 }
 
 .modal-large {
-    max-width: 850px;
+    max-width: 1100px;
 }
 
 .modal-content {
@@ -456,6 +456,10 @@
 
 .modal-body {
     padding: 1.5rem;
+}
+
+#recipeManagerModal .modal-body {
+    min-height: 350px;
 }
 
 .modal-body-scroll {

@@ -15,6 +15,13 @@ class ProductAuditLog extends Model
         'action',
         'old_price',
         'new_price',
+        'old_values',
+        'new_values',
+    ];
+
+    protected $casts = [
+        'old_values' => 'array',
+        'new_values' => 'array',
     ];
     public function product()
     {

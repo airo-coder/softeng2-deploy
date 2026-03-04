@@ -145,7 +145,7 @@
 </div>
 
 <!-- RECIPE MANAGER MODAL -->
-<div class="modal-container" id="recipeManagerModal">
+<div class="modal-container recipeManagerModal" id="recipeManagerModal">
     <div class="modal-content modal-large">
         <div class="modal-header">
             <span>Recipe Manager</span>
