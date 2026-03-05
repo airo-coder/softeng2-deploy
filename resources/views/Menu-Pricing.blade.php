@@ -120,7 +120,7 @@
             <!-- ADD ITEM ITEM NAME -->
             <div class="floating-add-item-name-container">
                 <label for="name">Item Name</label>
-                <input type="text" class="input" name="name">
+                <input type="text" class="input" name="name" required>
             </div>
             <!-- ADD ITEM CATEGORY OPTIONS -->
             <div class="floating-add-item-category-container">

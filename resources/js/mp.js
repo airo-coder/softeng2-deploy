@@ -81,12 +81,14 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
     // CANCEL BUTTON IN ADD ITEM MODAL FUNCTIONALITY
-    addItemModal.querySelectorAll(".cancel-button").forEach((btn) => {
-        btn.addEventListener("click", () => {
-            addItemModal.classList.remove("show");
-            overlay.classList.remove("show");
+    if (addItemModal) {
+        addItemModal.querySelectorAll(".cancel-button").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                addItemModal.classList.remove("show");
+                overlay.classList.remove("show");
+            });
         });
-    });
+    }
     // FILE INPUT & DRAG AND DROP FUNCTIONALITY
     function setupDragAndDrop(areaId, inputId, nameId) {
         const area = document.getElementById(areaId);
@@ -130,53 +132,58 @@ document.addEventListener("DOMContentLoaded", () => {
     setupDragAndDrop("editUploadArea", "editFileInput", "editFileName");
 
     // FLOATING ADD ITEM EDIT BUTTON FUNCTIONALITY
-    document.querySelectorAll(".edit-button").forEach((btn) => {
-        btn.addEventListener("click", () => {
-            const { id, name, category, price } = btn.dataset;
-            productForm.action = `/products/${id}`;
-            productForm.querySelector("#editName").value = name;
-            productForm.querySelector("#editPrice").value = price;
-            productForm.querySelector(
-                `#edit${category.charAt(0).toUpperCase() + category.slice(1)}`,
-            ).checked = true;
-            editModal.style.display = "flex";
-            overlay.classList.add("show");
+    if (productForm && editModal) {
+        document.querySelectorAll(".edit-button").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const { id, name, category, price } = btn.dataset;
+                productForm.action = `/products/${id}`;
+                productForm.querySelector("#editName").value = name;
+                productForm.querySelector("#editPrice").value = price;
+                const categoryId = category.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+                productForm.querySelector(`#edit${categoryId}`).checked = true;
+                editModal.style.display = "flex";
+                overlay.classList.add("show");
+            });
         });
-    });
-    // CANCEL BUTTON IN EDIT MODAL FUNCTIONALITY
-    editModal.querySelectorAll(".cancel-button").forEach((btn) => {
-        btn.addEventListener("click", () => {
-            editModal.style.display = "none";
-            overlay.classList.remove("show");
+        // CANCEL BUTTON IN EDIT MODAL FUNCTIONALITY
+        editModal.querySelectorAll(".cancel-button").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                editModal.style.display = "none";
+                overlay.classList.remove("show");
+            });
         });
-    });
+    }
     // DELETE BUTTON FUNCTIONALITY
-    document.querySelectorAll(".delete-button").forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-            e.preventDefault();
-            currentForm = btn.closest("form");
-            deleteModal.style.display = "flex";
-            overlay.classList.add("show");
+    if (deleteModal) {
+        document.querySelectorAll(".delete-button").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                e.preventDefault();
+                currentForm = btn.closest("form");
+                deleteModal.style.display = "flex";
+                overlay.classList.add("show");
+            });
         });
-    });
-    deleteModal.querySelector("#cancelDelete").addEventListener("click", () => {
-        deleteModal.style.display = "none";
-        overlay.classList.remove("show");
-        currentForm = null;
-    });
-    deleteModal
-        .querySelector("#confirmDelete")
-        .addEventListener("click", () => {
-            if (currentForm) currentForm.submit();
+        deleteModal.querySelector("#cancelDelete").addEventListener("click", () => {
+            deleteModal.style.display = "none";
+            overlay.classList.remove("show");
+            currentForm = null;
         });
+        deleteModal
+            .querySelector("#confirmDelete")
+            .addEventListener("click", () => {
+                if (currentForm) currentForm.submit();
+            });
+    }
     // CLICK OVERLAY TO CLOSE
-    overlay.addEventListener("click", () => {
-        addItemModal.classList.remove("show");
-        editModal.style.display = "none";
-        deleteModal.style.display = "none";
-        overlay.classList.remove("show");
-        currentForm = null;
-    });
+    if (overlay) {
+        overlay.addEventListener("click", () => {
+            if (addItemModal) addItemModal.classList.remove("show");
+            if (editModal) editModal.style.display = "none";
+            if (deleteModal) deleteModal.style.display = "none";
+            overlay.classList.remove("show");
+            currentForm = null;
+        });
+    }
     // AUTO-HIDE ALERT NOTIFICATIONS
     const alert = document.querySelector(".my-alert");
     if (alert) {
