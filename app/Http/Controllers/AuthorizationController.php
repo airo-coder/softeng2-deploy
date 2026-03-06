@@ -12,7 +12,15 @@ class AuthorizationController extends Controller
         ]);
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/main');
+
+            // Redirect to role-specific landing page
+            $role = Auth::user()->role;
+            return match ($role) {
+                'cashier'           => redirect()->route('pos'),
+                'kitchen_manager'   => redirect()->route('kp'),
+                'inventory_manager' => redirect()->route('im'),
+                default             => redirect()->route('reports.dashboard'),
+            };
         }
         return back()->withErrors([
             'email' => 'Invalid email or password.',

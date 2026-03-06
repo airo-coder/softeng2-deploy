@@ -30,11 +30,20 @@
     font-size: 0.8rem;
     font-weight: 600;
     text-decoration: none;
-    color: #555;
+    color: #333;
     background: #f5f5f5;
     border: 1.5px solid #e0e0e0;
     transition: all 0.2s ease;
     cursor: pointer;
+}
+
+/* Arrow icons need higher contrast */
+.page-first i,
+.page-last i,
+.page-prev i,
+.page-next i {
+    color: #333;
+    font-size: 0.7rem;
 }
 
 .page-btn:hover:not(.disabled):not(.active) {

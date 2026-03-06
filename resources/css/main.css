@@ -13,16 +13,17 @@ body{
 .side-bar-container{
     height: 100vh;
     padding: 2rem;
-    background: rgba(47, 47, 47, 0.4); 
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border-right: 1px solid rgba(255, 255, 255, 0.1); 
+    background: rgba(47, 47, 47, 0.35); 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-right: 1px solid rgba(255, 255, 255, 0.15); 
     width: 100%;
     max-width: 400px;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    transition: max-width 0.8s
+    transition: max-width 0.8s;
+    overflow-y: auto;
 }
 .side-bar-container.collapsed{
     width: 100%;

@@ -43,10 +43,12 @@
                         {{ $product->stock }} left
                     </div>
 
-                    <div class="product-image-container">
-                        <img src="{{ asset('storage/' . $product->image) }}" 
-                             alt="{{ $product->name }}" 
-                             onerror="this.style.display='none'; this.parentElement.classList.add('img-fallback'); this.parentElement.setAttribute('data-letter', '{{ substr($product->name, 0, 1) }}');">
+                    <div class="product-image-container {{ !$product->image ? 'img-fallback' : '' }}" {{ !$product->image ? 'data-letter=' . substr($product->name, 0, 1) : '' }}>
+                        @if($product->image)
+                            <img src="{{ asset('storage/' . $product->image) }}" 
+                                 alt="{{ $product->name }}" 
+                                 onerror="this.style.display='none'; this.parentElement.classList.add('img-fallback'); this.parentElement.setAttribute('data-letter', '{{ substr($product->name, 0, 1) }}');">
+                        @endif
                     </div>
                     <div class="product-info">
                         <span class="product-card-name">{{ $product->name }}</span>

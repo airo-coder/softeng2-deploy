@@ -477,3 +477,41 @@
 .overlay.show {
     display: block;
 }
+
+/* ===== END SHIFT TOAST ===== */
+.eod-toast {
+    position: fixed;
+    top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2d3436;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    z-index: 3000;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 4px solid #00b894;
+    animation: eodToastSlide 0.4s ease-out;
+}
+
+.eod-toast-icon {
+    background: #00b894;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 0.7rem;
+}
+
+@keyframes eodToastSlide {
+    from { top: -50px; opacity: 0; }
+    to { top: 2rem; opacity: 1; }
+}

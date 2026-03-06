@@ -13,11 +13,19 @@ use App\Http\Controllers\POSController;
 Route::get('/', function () {return view('login');})->name('login');
 Route::post('/login', [AuthorizationController::class, 'login'])->name('login.submit')->middleware('throttle:5,2');
 
-// Main dashboard route
-Route::get('/main', function () {return view('main');})->middleware('auth');
+// Main dashboard route — redirect to role-specific page
+Route::get('/main', function () {
+    $role = auth()->user()->role;
+    return match ($role) {
+        'cashier'           => redirect()->route('pos'),
+        'kitchen_manager'   => redirect()->route('kp'),
+        'inventory_manager' => redirect()->route('im'),
+        default             => redirect()->route('reports.dashboard'),
+    };
+})->middleware('auth');
 
-// === Kitchen Production Routes (Admin + Chef) ===
-Route::middleware(['auth', 'role:admin,chef'])->group(function () {
+// === Kitchen Production Routes (Admin + Kitchen Manager) ===
+Route::middleware(['auth', 'role:admin,kitchen_manager'])->group(function () {
     Route::get('/kitchenproduction', [KitchenProductionController::class, 'index'])->name('kp');
     Route::post('/kitchen/start-production', [KitchenProductionController::class, 'startProduction'])->name('kitchen.startProduction');
     Route::patch('/kitchen/update-status/{id}', [KitchenProductionController::class, 'updateStatus'])->name('kitchen.updateStatus');
@@ -53,8 +61,8 @@ Route::middleware(['auth', 'role:admin,cashier'])->group(function () {
     Route::get('/transactionhistory', [POSController::class, 'history'])->name('POShistory');
 });
 
-// === Inventory Management (Admin + Chef) ===
-Route::middleware(['auth', 'role:admin,chef'])->group(function () {
+// === Inventory Management (Admin + Inventory Manager) ===
+Route::middleware(['auth', 'role:admin,inventory_manager'])->group(function () {
     Route::get('/stockhistory', [IngredientController::class, 'auditLog'])->name('stock-history');
     Route::get('/inventorymanagement', [IngredientController::class, 'index'])->name('im');
     Route::post('/ingredients', [IngredientController::class, 'store'])->name('ingredients.store');

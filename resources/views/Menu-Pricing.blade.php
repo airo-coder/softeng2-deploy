@@ -67,8 +67,14 @@
                         <tr class="tr" data-category="{{ $product->category }}">
                             <td>
                                 <div class="product-name-and-image">
-                                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}"
-                                        class="product-image">
+                                    @if($product->image)
+                                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}"
+                                            class="product-image">
+                                    @else
+                                        <div class="product-image product-image-placeholder" title="{{ $product->name }}">
+                                            {{ strtoupper(substr($product->name, 0, 1)) }}
+                                        </div>
+                                    @endif
                                     <span>{{ $product->name }}</span>
                                     @if($product->recipes->isNotEmpty())
                                         <i class="bi bi-book" title="Is a cooked item (has recipe)" style="color: #6c5ce7; font-size: 0.9rem; margin-left: 0.5rem;"></i>
@@ -144,7 +150,7 @@
             <!-- ADD ITEM IMAGE UPLOADER -->
             <div class="floating-add-item-image-container">
                 <div class="image-wrapper">
-                    <label>Image</label>
+                    <label>Image <span style="color: #999; font-weight: 400; font-size: 0.85rem;">(Optional)</span></label>
                     <div class="file-upload-area" id="addUploadArea">
                         <div class="upload-icon">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

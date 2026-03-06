@@ -211,6 +211,18 @@ td {
     object-fit: cover;
     margin-right: 1rem;
 }
+
+.product-image-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+    color: white;
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
 .floating-edit-item-container,
 .POST-class {
     border-bottom-left-radius: 0.6rem;

@@ -51,7 +51,9 @@ class ProductAuditLogController extends Controller
             $query->where('user_id', $request->user_id);
         }
 
-        $users = User::orderBy('first_name')->get();
+        $users = User::whereIn('id',
+            ProductAuditLog::where('action', 'LIKE', 'Wasted%')->pluck('user_id')->unique()
+        )->orderBy('first_name')->get();
         $logs = $query->paginate(10)->withQueryString();
         return view('Waste-Logs', compact('logs', 'users'));
     }

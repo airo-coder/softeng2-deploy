@@ -471,10 +471,13 @@
     font-weight: 600;
     color: #555;
 }
-.payment-card i { font-size: 1.5rem; }
+.payment-card i { font-size: 1.5rem; color: #333; }
 .payment-option input:checked + .payment-card {
     border-color: #8B0000;
     background: #fff5f5;
+    color: #8B0000;
+}
+.payment-option input:checked + .payment-card i {
     color: #8B0000;
 }
 

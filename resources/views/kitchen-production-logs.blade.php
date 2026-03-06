@@ -46,16 +46,6 @@
 
         <div class="main-body-container">
             <table>
-                <colgroup>
-                    <col style="width: 14%">
-                    <col style="width: 7%">
-                    <col style="width: 7%">
-                    <col style="width: 9%">
-                    <col style="width: 9%">
-                    <col style="width: 25%">
-                    <col style="width: 14%">
-                    <col style="width: 15%">
-                </colgroup>
                 <thead>
                     <tr class="tr">
                         <th class="th">Product</th>

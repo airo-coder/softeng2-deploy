@@ -41,6 +41,10 @@ document.addEventListener('DOMContentLoaded', () => {
     overlay?.addEventListener('click', closeModal);
 
     confirmEndShift?.addEventListener('click', async () => {
+        if (confirmEndShift.disabled) return;
+        confirmEndShift.disabled = true;
+        confirmEndShift.textContent = 'Ending...';
+
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
         try {
             const res = await fetch('/kitchen/end-shift', {
@@ -54,12 +58,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await res.json();
             if (res.ok && data.success) {
                 closeModal();
-                window.location.reload();
+                // Show toast notification
+                const toast = document.createElement('div');
+                toast.className = 'eod-toast';
+                toast.innerHTML = '<span class="eod-toast-icon">✓</span> Shift ended successfully';
+                document.body.appendChild(toast);
+                setTimeout(() => { toast.remove(); window.location.reload(); }, 1500);
             } else {
                 alert(data.message || 'Failed to end shift.');
+                confirmEndShift.disabled = false;
+                confirmEndShift.textContent = 'End Shift';
             }
         } catch (err) {
             alert('Network error. Please try again.');
+            confirmEndShift.disabled = false;
+            confirmEndShift.textContent = 'End Shift';
         }
     });
 });

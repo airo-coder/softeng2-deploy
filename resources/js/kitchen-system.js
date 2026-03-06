@@ -466,24 +466,76 @@ document.addEventListener('DOMContentLoaded', () => {
     const startShiftModal = document.getElementById('startShiftModal');
     const endShiftModal = document.getElementById('endShiftModal');
 
+    function resetStartShiftModal() {
+        const container = document.getElementById('shiftStockInRows');
+        if (!container) return;
+        const rows = container.querySelectorAll('.shift-stock-row');
+        // Remove all rows except the first one
+        rows.forEach((row, i) => { if (i > 0) row.remove(); });
+        // Clear the first row's values and fully rebuild its searchable select
+        const firstRow = container.querySelector('.shift-stock-row');
+        if (firstRow) {
+            const sel = firstRow.querySelector('.shift-ingredient-select');
+            sel.value = '';
+            firstRow.querySelector('.shift-quantity').value = '';
+            firstRow.querySelector('.shift-supplier').value = '';
+            // Remove the remove button if it exists on the first row
+            const removeBtn = firstRow.querySelector('.remove-shift-row-btn');
+            if (removeBtn) removeBtn.remove();
+            // Remove ALL existing searchable-dropdown wrappers and re-init clean
+            firstRow.querySelectorAll('.searchable-dropdown').forEach(w => {
+                // Move the select out before removing the wrapper
+                w.parentNode.insertBefore(sel, w);
+                w.remove();
+            });
+            // Clear the init flag so it re-initializes
+            delete sel.dataset.sdInit;
+            sel.style.display = '';
+            initSearchableSelects(firstRow);
+        }
+        // Hide error
+        const errorDiv = document.getElementById('shiftError');
+        if (errorDiv) errorDiv.style.display = 'none';
+    }
+
     document.getElementById('openStartShift')?.addEventListener('click', () => {
+        resetStartShiftModal();
         closeAll();
         startShiftModal.classList.add('active');
         openOverlay();
     });
-    document.getElementById('closeStartShift')?.addEventListener('click', closeAll);
-    document.getElementById('cancelStartShift')?.addEventListener('click', closeAll);
+    document.getElementById('closeStartShift')?.addEventListener('click', () => { resetStartShiftModal(); closeAll(); });
+    document.getElementById('cancelStartShift')?.addEventListener('click', () => { resetStartShiftModal(); closeAll(); });
 
     // Add more ingredient rows + re-init searchable selects on new row
     document.getElementById('addShiftRow')?.addEventListener('click', () => {
         const container = document.getElementById('shiftStockInRows');
         const firstRow = container.querySelector('.shift-stock-row');
         const newRow = firstRow.cloneNode(true);
-        newRow.querySelector('.shift-ingredient-select').value = '';
+        const sel = newRow.querySelector('.shift-ingredient-select');
+        sel.value = '';
         newRow.querySelector('.shift-quantity').value = '';
         newRow.querySelector('.shift-supplier').value = '';
+        // Remove cloned searchable-dropdown wrappers and re-init fresh
+        newRow.querySelectorAll('.searchable-dropdown').forEach(w => {
+            w.parentNode.insertBefore(sel, w);
+            w.remove();
+        });
+        delete sel.dataset.sdInit;
+        sel.style.display = '';
+        // Add remove button to new row
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'remove-shift-row-btn';
+        removeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+        removeBtn.title = 'Remove this row';
+        removeBtn.addEventListener('click', () => newRow.remove());
+        // Remove existing remove button if cloned
+        const existingRemoveBtn = newRow.querySelector('.remove-shift-row-btn');
+        if (existingRemoveBtn) existingRemoveBtn.remove();
+        newRow.appendChild(removeBtn);
         container.appendChild(newRow);
-        initSearchableSelects(container); // re-init for the new row's select
+        initSearchableSelects(newRow);
     });
 
     document.getElementById('confirmStartShift')?.addEventListener('click', async () => {

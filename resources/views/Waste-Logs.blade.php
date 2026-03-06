@@ -4,7 +4,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     @vite(['resources/css/mp.css'])
     @vite(['resources/css/waste-logs.css'])
-    @vite(['resources/js/mp.js'])
     @vite(['resources/js/waste-logs.js'])
 
     <div class="menu-pricing-parent-container">
@@ -18,7 +17,7 @@
                         <i class="bi bi-x-lg active-icon" style="display: none !important;"></i>
                     </div>
                     
-                    <div class="filter-dropdown" id="filterDropdown" style="display: none;">
+                    <div class="filter-dropdown" id="filterDropdown" style="display: none; position: absolute; z-index: 100; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 1rem; min-width: 200px;">
                         <form method="GET" action="{{ route('waste.logs') }}" class="filter-dropdown-form">
                             {{-- User filter --}}
                             <div class="filter-group">

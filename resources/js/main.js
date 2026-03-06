@@ -49,4 +49,34 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         document.addEventListener('click', () => popup.classList.remove('open'));
     }
+
+    // 4. GLOBAL FORM DOUBLE-SUBMIT PROTECTION
+    // Prevents spam-clicking on Add/Save/Submit buttons from creating duplicates
+    document.querySelectorAll('form[method="POST"], form[method="post"]').forEach(form => {
+        form.addEventListener('submit', function (e) {
+            if (form.dataset.submitted === 'true') {
+                e.preventDefault();
+                return;
+            }
+            form.dataset.submitted = 'true';
+
+            // Disable all submit buttons in this form
+            const buttons = form.querySelectorAll('button[type="submit"], input[type="submit"], .add-button, .save-button, .delete-confirm-button');
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.style.opacity = '0.6';
+                btn.style.pointerEvents = 'none';
+            });
+
+            // Re-enable after 3 seconds as a safety net (in case submission fails/redirects slowly)
+            setTimeout(() => {
+                form.dataset.submitted = 'false';
+                buttons.forEach(btn => {
+                    btn.disabled = false;
+                    btn.style.opacity = '';
+                    btn.style.pointerEvents = '';
+                });
+            }, 3000);
+        });
+    });
 });

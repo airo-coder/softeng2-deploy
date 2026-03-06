@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ asset('favicon.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -11,6 +12,7 @@
     @vite(['resources/js/main.js', 'resources/js/export.js'])
 </head>
 <body>
+@php $userRole = auth()->user()->role ?? 'admin'; @endphp
 <div class="side-bar-container">
     <!-- LOGO DROP DOWN  -->
     <div class="logo-and-drop-down-container">
@@ -19,30 +21,14 @@
             <img src="{{asset('favicon.png')}}" alt="UM Dining Center" class ="sidebar-logo-collapsed">
         </div>
         <div class="drop-down-container" style="display: flex; align-items: center; gap: 0.5rem;">
-            @php
-                $lowStockIngredients = \App\Models\Ingredient::whereColumn('stock', '<=', 'threshold')->get();
-                $lowStockCount = $lowStockIngredients->count();
-            @endphp
-            @if($lowStockCount > 0)
-            <div class="low-stock-bell" id="lowStockBell" style="position: relative; cursor: pointer;">
-                <i class="fa-solid fa-bell" style="font-size: 1.1rem; color: #fdcb6e;"></i>
-                <span class="low-stock-badge">{{ $lowStockCount }}</span>
-                <div class="low-stock-popup" id="lowStockPopup">
-                    <div class="popup-title"><i class="fa-solid fa-triangle-exclamation"></i> Low Stock Alerts</div>
-                    @foreach($lowStockIngredients as $lsi)
-                    <div class="popup-item">
-                        <span>{{ $lsi->name }}</span>
-                        <span class="item-stock">{{ $lsi->stock }} {{ $lsi->unit }}</span>
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-            @endif
             <i class="fa-solid fa-angles-left drop-down-container-button"></i>
         </div>
     </div>
     <div class="drop-down-main-container">
-        <!-- Point of Sales shit ni -->
+        {{-- ============================================ --}}
+        {{-- POINT OF SALE — Admin + Cashier --}}
+        {{-- ============================================ --}}
+        @if(in_array($userRole, ['admin', 'cashier']))
         <div class="point-of-sales-container subsystem">
             <div class="point-of-sale">
                 <i class="fa-solid fa-cash-register me-3"></i>
@@ -66,7 +52,12 @@
                 </div>
             </a>
         </div>
-        <!-- Kitchen Production -->
+        @endif
+
+        {{-- ============================================ --}}
+        {{-- KITCHEN PRODUCTION — Admin + Kitchen Manager --}}
+        {{-- ============================================ --}}
+        @if(in_array($userRole, ['admin', 'kitchen_manager']))
         <div class="kitchen-production-container subsystem">
             <div class="kitchen-production">
                 <i class="fa-solid fa-utensils me-2"></i>
@@ -90,10 +81,14 @@
                 </div>
             </a>
         </div>
-        <!-- Inventory Manager shit ni -->
+        @endif
+
+        {{-- ============================================ --}}
+        {{-- INVENTORY MANAGEMENT — Admin + Inventory Manager --}}
+        {{-- ============================================ --}}
+        @if(in_array($userRole, ['admin', 'inventory_manager']))
         <div class="inventory-management-container subsystem">
             <div class="inventory-management">
-                <!-- icon -->
                 <i class="fa-solid fa-boxes-stacked me-3"></i>
                 <span class ="subsystem-span">Inventory Management</span>
             </div>
@@ -121,7 +116,12 @@
                 </div>
             </a>
         </div>
-        <!-- Menu and Pricing shit ni diria -->
+        @endif
+
+        {{-- ============================================ --}}
+        {{-- MENU & PRICING — Admin only --}}
+        {{-- ============================================ --}}
+        @if($userRole === 'admin')
         <div class="menu-pricing-container subsystem">
             <div class="menu-pricing">
                 <i class="fa-solid fa-book-open me-3"></i>
@@ -151,8 +151,12 @@
                 </div>
             </a>
         </div>
+        @endif
 
-        <!-- CVAM ass shit ni diria -->
+        {{-- ============================================ --}}
+        {{-- ANALYSIS & REPORTING — Admin only --}}
+        {{-- ============================================ --}}
+        @if($userRole === 'admin')
         <div class="analysis-and-reporting-container subsystem">
             <div class="analysis-and-reporting">
                 <i class="fa-solid fa-chart-line me-3"></i>
@@ -188,8 +192,9 @@
                 </div>
             </a>
         </div>
+        @endif
     </div>
-    <form action="{{ route('login') }}">
+    <form action="{{ route('login') }}" style="margin-top: auto;">
         <div class="logout-button-wrapper">
             <button class="logout-button">
                 <i class="fa-solid fa-right-from-bracket me-3" style="color: red;"></i>
