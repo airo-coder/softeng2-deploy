@@ -206,5 +206,104 @@
 <div class="main-content">
     @yield('content')
 </div>
+
+<!-- Export Date Range Modal (shared) -->
+<div id="exportDateRangeModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; background:rgba(0,0,0,0.5); justify-content:center; align-items:center;">
+    <div style="background:white; border-radius:1rem; padding:2rem; width:400px; max-width:90%; box-shadow:0 10px 40px rgba(0,0,0,0.25);">
+        <h3 style="margin:0 0 0.5rem 0; font-size:1.15rem; color:#2d3436;"><i class="fa-solid fa-file-export" style="margin-right:0.5rem; color:#2975da;"></i>Export Data</h3>
+        <p style="margin:0 0 1.2rem 0; font-size:0.85rem; color:#636e72;">Select a date range for the export. All matching records will be included.</p>
+        <div style="display:flex; gap:1rem; margin-bottom:1.2rem;">
+            <div style="flex:1;">
+                <label style="display:block; font-size:0.8rem; font-weight:600; color:#636e72; margin-bottom:0.3rem;">From</label>
+                <input type="date" id="exportDateFrom" style="width:100%; padding:0.55rem 0.7rem; border:1px solid #e0e0e0; border-radius:0.6rem; font-family:inherit; font-size:0.9rem;">
+            </div>
+            <div style="flex:1;">
+                <label style="display:block; font-size:0.8rem; font-weight:600; color:#636e72; margin-bottom:0.3rem;">To</label>
+                <input type="date" id="exportDateTo" style="width:100%; padding:0.55rem 0.7rem; border:1px solid #e0e0e0; border-radius:0.6rem; font-family:inherit; font-size:0.9rem;">
+            </div>
+        </div>
+        <div style="display:flex; gap:0.75rem; justify-content:flex-end;">
+            <button id="exportCancelBtn" style="padding:0.55rem 1.3rem; border:1px solid #dfe6e9; background:white; border-radius:2rem; cursor:pointer; font-weight:600; color:#636e72; font-size:0.85rem;">Cancel</button>
+            <button id="exportConfirmBtn" style="padding:0.55rem 1.3rem; border:none; background:#2975da; color:white; border-radius:2rem; cursor:pointer; font-weight:700; font-size:0.85rem; box-shadow:0 3px 10px rgba(41,117,218,0.25);">Download CSV</button>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ===== Print-to-PDF Styles for Report Pages ===== */
+@media print {
+    body {
+        background: white !important;
+        overflow: visible !important;
+    }
+    .side-bar-container,
+    .overlay,
+    .modal-container,
+    .eod-tabs,
+    .report-actions button,
+    .eod-date-form,
+    #exportDateRangeModal,
+    .end-shift-btn-report,
+    [data-export-url],
+    [data-export-type],
+    .export-audit-log-button,
+    .pagination-container,
+    nav,
+    .filter-icon-container,
+    .filter-dropdown {
+        display: none !important;
+    }
+    .main-content {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+    .main-container,
+    .parent-container,
+    .report-container {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    .print-header {
+        display: block !important;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid #2975da;
+    }
+    .print-header h1 {
+        font-size: 1.4rem;
+        color: #2d3436;
+        margin: 0;
+    }
+    .print-header p {
+        font-size: 0.85rem;
+        color: #636e72;
+        margin: 0.2rem 0 0 0;
+    }
+    /* Show all panels including hidden tabs */
+    .eod-panel {
+        display: block !important;
+        page-break-inside: avoid;
+        margin-bottom: 1.5rem;
+    }
+    /* Chart.js canvases print as raster images automatically */
+    canvas {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+    table {
+        page-break-inside: auto;
+    }
+    tr {
+        page-break-inside: avoid;
+    }
+}
+.print-header {
+    display: none;
+}
+</style>
 </body>
 </html>

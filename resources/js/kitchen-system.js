@@ -166,9 +166,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (recipes.length === 0) {
                 list.innerHTML = '<p style="color:#999;font-size:0.85rem;">No ingredients yet. Add some below.</p>';
             } else {
+                let totalRecipeCost = 0;
                 list.innerHTML = recipes.map(r => {
                     let qty = parseFloat(r.quantity);
                     let unit = r.ingredient?.unit || '';
+                    let costPerUnit = parseFloat(r.ingredient?.cost_per_unit || 0);
                     let displayQty = qty;
                     let displayUnit = unit;
                     let isConverted = false;
@@ -179,9 +181,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         isConverted = true;
                     }
 
+                    // Calculate cost: always use base qty * cost_per_unit
+                    let ingredientCost = qty * costPerUnit;
+                    totalRecipeCost += ingredientCost;
+
                     return `
-                    <div class="recipe-item" data-recipe-id="${r.id}" data-converted="${isConverted}">
-                        <span>${r.ingredient?.name || 'Unknown'} — <strong class="recipe-qty" contenteditable="true" data-original="${displayQty}">${displayQty}</strong> <span class="recipe-unit">${displayUnit}</span></span>
+                    <div class="recipe-item" data-recipe-id="${r.id}" data-converted="${isConverted}" data-cost-per-unit="${costPerUnit}" data-base-unit="${unit}">
+                        <span>${r.ingredient?.name || 'Unknown'} — <strong class="recipe-qty" contenteditable="true" data-original="${displayQty}">${displayQty}</strong> <span class="recipe-unit">${displayUnit}</span>
+                        <span class="recipe-cost" style="color:#2975da; font-weight:600; margin-left:0.5rem; font-size:0.82rem;">₱${ingredientCost.toFixed(2)}</span></span>
                         <div class="recipe-item-actions">
                             <button class="recipe-save-btn" data-id="${r.id}" title="Save" style="display:none;"><i class="fa-solid fa-check"></i></button>
                             <button class="recipe-delete-btn" data-id="${r.id}" title="Remove"><i class="fa-solid fa-trash"></i></button>
@@ -189,10 +196,41 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 `}).join('');
 
+                // Add total cost footer
+                list.innerHTML += `
+                <div class="recipe-total-cost" style="margin-top:0.75rem; padding:0.6rem 1rem; background:linear-gradient(135deg, #f0f7ff, #e8f0fe); border-radius:0.8rem; border:1px solid #d0e3f7; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:0.85rem; color:#636e72; font-weight:600;"><i class="fa-solid fa-coins" style="margin-right:0.4rem;"></i>Total Recipe Cost</span>
+                    <span id="recipeTotalCost" style="font-size:1.05rem; font-weight:700; color:#2d3436;">₱${totalRecipeCost.toFixed(2)}</span>
+                </div>`;
+
                 list.querySelectorAll('.recipe-qty').forEach(qty => {
                     qty.addEventListener('input', function() {
                         const saveBtn = this.closest('.recipe-item').querySelector('.recipe-save-btn');
                         saveBtn.style.display = this.textContent.trim() !== this.dataset.original ? 'inline-flex' : 'none';
+
+                        // Recalculate cost dynamically
+                        const item = this.closest('.recipe-item');
+                        const costPerUnit = parseFloat(item.dataset.costPerUnit || 0);
+                        const baseUnit = item.dataset.baseUnit;
+                        const isConverted = item.dataset.converted === 'true';
+                        let editedQty = parseFloat(this.textContent.trim()) || 0;
+                        // Convert back to base unit for cost calc
+                        if (isConverted && baseUnit === 'kg') editedQty = editedQty / 1000;
+                        const newCost = editedQty * costPerUnit;
+                        item.querySelector('.recipe-cost').textContent = `₱${newCost.toFixed(2)}`;
+
+                        // Recalculate total
+                        let newTotal = 0;
+                        list.querySelectorAll('.recipe-item').forEach(ri => {
+                            const cpu = parseFloat(ri.dataset.costPerUnit || 0);
+                            const bu = ri.dataset.baseUnit;
+                            const ic = ri.dataset.converted === 'true';
+                            let q = parseFloat(ri.querySelector('.recipe-qty').textContent.trim()) || 0;
+                            if (ic && bu === 'kg') q = q / 1000;
+                            newTotal += q * cpu;
+                        });
+                        const totalEl = document.getElementById('recipeTotalCost');
+                        if (totalEl) totalEl.textContent = `₱${newTotal.toFixed(2)}`;
                     });
                 });
 
@@ -213,6 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 body: JSON.stringify({ quantity: qty })
                             });
                             if (res.ok) {
+                                showToast('Recipe quantity updated successfully!', 'success');
                                 document.getElementById('recipeProductSelect').dispatchEvent(new Event('change'));
                             } else { showToast('Failed to save.'); }
                         } catch (err) { showToast('Error saving.'); }
@@ -230,6 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' }
                             });
                             if (res.ok) {
+                                showToast('Ingredient removed from recipe!', 'success');
                                 document.getElementById('recipeProductSelect').dispatchEvent(new Event('change'));
                             } else { showToast('Failed to remove.'); }
                         } catch (err) { showToast('Error removing ingredient.'); }
@@ -273,6 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (res.ok) {
+                showToast('Ingredient added to recipe!', 'success');
                 document.getElementById('recipeProductSelect').dispatchEvent(new Event('change'));
                 document.getElementById('recipeQuantity').value = '';
                 document.getElementById('recipeIngredientSelect').value = '';

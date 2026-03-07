@@ -41,6 +41,18 @@
 
         <!-- WHERE CONTROLS LAYER ENDS AND MAIN TABLE STARTS-->
         <div class="table-container">
+            @php
+                $catFilter = request('category');
+                $catIcons = [
+                    'drinks' => '<i class="fa-solid fa-wine-glass"></i>', 
+                    'snacks' => '<i class="fa-solid fa-cookie-bite"></i>', 
+                    'meals' => '<i class="fa-solid fa-bowl-food"></i>', 
+                    'ready_made' => '<i class="fa-solid fa-box-open"></i>'
+                ];
+                $icon = $catFilter ? ($catIcons[$catFilter] ?? '<i class="bi bi-funnel-fill"></i>') : '<i class="bi bi-funnel-fill"></i>';
+                $filterLabel = $catLabels[$catFilter] ?? 'All Products';
+            @endphp
+            <div class="active-filter-title">{!! $icon !!} {{ $filterLabel }}</div>
             <table>
                 <!-- TO ADJUST THE TABLE'S WIDTH DISTRIBUTION -->
                 <colgroup>

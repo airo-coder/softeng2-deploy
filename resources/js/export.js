@@ -1,70 +1,73 @@
 /**
- * exportTableToCSV - Exports the visible table on the page to a CSV file
- * @param {string} filename - The base name for the downloaded file
+ * Export System — Date Range Modal + Server-Side CSV / Print-to-PDF
+ * 
+ * Usage on export buttons:
+ *   data-export-url="/export/pos-history"   → server-side CSV with date range modal
+ *   data-export-type="print"                → window.print() for report pages
  */
-function exportTableToCSV(filename) {
-    const table = document.querySelector('table');
-    if (!table) {
-        // Show toast instead of browser alert
-        const toast = document.getElementById('kitchenToast') || document.querySelector('.my-alert');
-        if (toast) {
-            const msg = toast.querySelector('#kitchenToastMessage') || toast;
-            msg.textContent = 'No table found to export.';
-            toast.style.display = 'flex';
-            setTimeout(() => { toast.style.display = 'none'; }, 3000);
-        } else {
-            console.warn('No table found to export.');
-        }
-        return;
-    }
 
-    const rows = table.querySelectorAll('tr');
-    const csvData = [];
+document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById('exportDateRangeModal');
+    const overlay = document.getElementById('exportOverlay');
+    if (!modal) return;
 
-    rows.forEach(row => {
-        const cols = row.querySelectorAll('th, td');
-        const rowData = [];
-        cols.forEach(col => {
-            // Get text content, clean it, and escape quotes
-            let text = col.textContent.trim().replace(/\s+/g, ' ');
-            // Escape double quotes by doubling them
-            text = text.replace(/"/g, '""');
-            rowData.push(`"${text}"`);
+    const dateFrom = document.getElementById('exportDateFrom');
+    const dateTo = document.getElementById('exportDateTo');
+    const confirmBtn = document.getElementById('exportConfirmBtn');
+    const cancelBtn = document.getElementById('exportCancelBtn');
+
+    // Default dates: today
+    const today = new Date().toISOString().split('T')[0];
+
+    let pendingExportUrl = '';
+
+    // Attach to all export buttons
+    document.querySelectorAll('[data-export-url], [data-export-name]').forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const exportType = this.dataset.exportType;
+            
+            if (exportType === 'print') {
+                // Report pages: use window.print() for PDF
+                window.print();
+                return;
+            }
+
+            const exportUrl = this.dataset.exportUrl;
+            if (exportUrl) {
+                // Table pages: show date range modal
+                pendingExportUrl = exportUrl;
+                dateFrom.value = today;
+                dateTo.value = today;
+                modal.style.display = 'flex';
+                if (overlay) overlay.style.display = 'block';
+            }
         });
-        csvData.push(rowData.join(','));
     });
 
-    const csvContent = csvData.join('\n');
-    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
+    // Cancel
+    cancelBtn?.addEventListener('click', closeExportModal);
+    modal?.addEventListener('click', function(e) {
+        if (e.target === modal) closeExportModal();
+    });
 
-    const now = new Date();
-    const timestamp = now.getFullYear() + '-' +
-        String(now.getMonth() + 1).padStart(2, '0') + '-' +
-        String(now.getDate()).padStart(2, '0') + '_' +
-        String(now.getHours()).padStart(2, '0') + '-' +
-        String(now.getMinutes()).padStart(2, '0');
+    function closeExportModal() {
+        modal.style.display = 'none';
+        if (overlay) overlay.style.display = 'none';
+        pendingExportUrl = '';
+    }
 
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${filename}_${timestamp}.csv`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-}
-
-// Auto-wire export buttons when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-    // Wire all export buttons by looking for common selectors
-    const exportButtons = document.querySelectorAll('.export-sales-data-container button, .export-btn, .export-audit-log-button, .export-sales-data-button');
-
-    exportButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            // Determine filename from page title or data attribute
-            const pageName = btn.dataset.exportName || document.title.replace(/[^a-zA-Z0-9]/g, '_') || 'export';
-            exportTableToCSV(pageName);
-        });
+    // Confirm export
+    confirmBtn?.addEventListener('click', function () {
+        if (!pendingExportUrl) return;
+        const params = new URLSearchParams();
+        if (dateFrom.value) params.set('date_from', dateFrom.value);
+        if (dateTo.value) params.set('date_to', dateTo.value);
+        
+        const url = pendingExportUrl + '?' + params.toString();
+        window.location.href = url;
+        closeExportModal();
     });
 });

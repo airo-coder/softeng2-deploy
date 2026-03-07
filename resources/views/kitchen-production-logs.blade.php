@@ -37,7 +37,7 @@
                 </form>
             </div>
             <div class="export-sales-data-container">
-                <button class="export-btn" id="exportBtn" data-export-name="kitchen-production-logs">
+                <button class="export-btn" id="exportBtn" data-export-name="kitchen-production-logs" data-export-url="/export/kitchen-logs">
                     <i class="fa-solid fa-print"></i>
                     <span>Export Production Logs</span>
                 </button>
@@ -45,6 +45,12 @@
         </div>
 
         <div class="main-body-container">
+            @php
+                $statusFilter = request('status');
+                $statusLabels = ['served' => 'Served', 'wasted' => 'Wasted'];
+                $filterLabel = $statusLabels[$statusFilter] ?? 'All Status';
+            @endphp
+            <div class="active-filter-title"><i class="bi bi-funnel-fill"></i> {{ $filterLabel }}</div>
             <table>
                 <thead>
                     <tr class="tr">

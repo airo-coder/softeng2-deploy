@@ -56,7 +56,7 @@
 
                 <!-- BUTTON CONTAINER -->
                 <div class="button-container">
-                    <button class="export-sales-data-button" data-export-name="ingredient-history">
+                    <button class="export-sales-data-button" data-export-name="ingredient-history" data-export-url="/export/ingredient-history">
                         <i class="fa-solid fa-print"></i>
                         <span>Export Log</span>
                     </button>
@@ -65,6 +65,12 @@
 
             <!-- TABLE -->
             <div class="table-container">
+                @php
+                    $actFilter = request('action');
+                    $actLabels = ['created' => 'Created', 'edited' => 'Edited', 'deleted' => 'Deleted'];
+                    $filterLabel = $actLabels[$actFilter] ?? 'All Actions';
+                @endphp
+                <div class="active-filter-title"><i class="bi bi-funnel-fill"></i> {{ $filterLabel }}</div>
                 <table>
                     <colgroup>
                         <col style="width: 20%">

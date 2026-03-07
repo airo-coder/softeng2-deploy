@@ -10,6 +10,7 @@
         {{-- Header --}}
         <div class="report-header">
             <div class="report-title">
+                <div class="print-header"><h1>End of Day Report</h1><p>{{ \Carbon\Carbon::parse($date)->format('F d, Y') }}</p></div>
                 <h1>End of Day Report</h1>
                 <p class="text-muted">Daily summary for <strong>{{ \Carbon\Carbon::parse($date)->format('F d, Y') }}</strong></p>
             </div>

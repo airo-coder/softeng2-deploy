@@ -310,3 +310,23 @@ a{
     color: #e74c3c;
     font-weight: 700;
 }
+
+/* ===== On-Page Active Filter Title ===== */
+.active-filter-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, rgba(41, 117, 218, 0.08), rgba(41, 117, 218, 0.03));
+    border: 1px solid rgba(41, 117, 218, 0.15);
+    color: #2975da;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.45rem 1.1rem;
+    border-radius: 2rem;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.3px;
+}
+.active-filter-title i {
+    font-size: 0.75rem;
+    color: #2975da;
+}

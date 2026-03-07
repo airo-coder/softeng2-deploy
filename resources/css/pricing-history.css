@@ -109,3 +109,48 @@
     background-color: #ffebee;
     color: #d63031;
 }
+
+/* ===== Clean Edit Change Details ===== */
+.change-details-container {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.change-detail-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    flex-wrap: wrap;
+}
+
+.change-label {
+    background: #eef2f7;
+    color: #636e72;
+    padding: 0.15rem 0.5rem;
+    border-radius: 1rem;
+    font-weight: 600;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+
+.change-old {
+    color: #b2bec3;
+    text-decoration: line-through;
+    font-weight: 500;
+}
+
+.change-arrow {
+    color: #b2bec3;
+    font-size: 0.65rem;
+}
+
+.change-new {
+    color: #2d3436;
+    font-weight: 700;
+}

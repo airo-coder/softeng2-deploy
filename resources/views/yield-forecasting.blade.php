@@ -11,11 +11,12 @@
     <div class="parent-container">
         <div class="report-header">
             <div class="report-title">
+                <div class="print-header"><h1>Yield & Forecasting Report</h1><p>Generated on {{ now()->format('F d, Y') }}</p></div>
                 <h1>Yield & Forecasting</h1>
                 <p class="text-muted">Production efficiency and demand projections based on sales history.</p>
             </div>
             <div class="report-actions">
-                <button class="export-btn" data-export-name="yield-forecasting-report">
+                <button class="export-btn" data-export-name="yield-forecasting-report" data-export-url="/export/yield-forecasting">
                     <i class="fa-solid fa-print"></i>
                     <span>Export Yield & Forecasting Report</span>
                 </button>

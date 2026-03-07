@@ -65,7 +65,7 @@
 
                 <!-- BUTTON CONTAINER -->
                 <div class="button-container">
-                    <button class="export-sales-data-button" data-export-name="stock-history">
+                    <button class="export-sales-data-button" data-export-name="stock-history" data-export-url="/export/stock-history">
                         <i class="fa-solid fa-print"></i>
                         <span>Export Stock History</span>
                     </button>
@@ -74,6 +74,12 @@
 
             <!-- TABLE -->
             <div class="table-container">
+                @php
+                    $actFilter = request('action');
+                    $actLabels = ['stock_in' => 'Stock In', 'stock_out' => 'Stock Out'];
+                    $filterLabel = $actLabels[$actFilter] ?? 'All Actions';
+                @endphp
+                <div class="active-filter-title"><i class="bi bi-funnel-fill"></i> {{ $filterLabel }}</div>
                 <table>
                     <colgroup>
                         <col style="width: 25%">

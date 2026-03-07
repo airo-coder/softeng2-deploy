@@ -32,18 +32,6 @@
                                     <option value="deleted" {{ request('action') === 'deleted' ? 'selected' : '' }}>Deleted</option>
                                 </select>
                             </div>
-                            {{-- User filter --}}
-                            <div class="filter-group">
-                                <label>User</label>
-                                <select name="user_id">
-                                    <option value="">All Users</option>
-                                    @foreach ($users as $user)
-                                        <option value="{{ $user->id }}"
-                                            {{ request('user_id') == $user->id ? 'selected' : '' }}>
-                                            {{ $user->first_name }} {{ $user->last_name }}
-                                        </option>
-                                    @endforeach
-                                </select>
                             </div>
                             <button type="submit" class="apply-filter-button">Apply Filter</button>
                         </form>
@@ -80,7 +68,7 @@
 
                 <!-- EXPORT BUTTON -->
                 <div class="export-sales-data-container">
-                    <button class="export-audit-log-button" data-export-name="pricing-history">
+                    <button class="export-audit-log-button" data-export-name="pricing-history" data-export-url="/export/pricing-history">
                         <i class="fa-solid fa-print"></i>
                         <span>Export Product Audit Log</span>
                     </button>
@@ -90,6 +78,12 @@
 
         <!-- MAIN TABLE -->
         <div class="table-container">
+            @php
+                $actFilter = request('action');
+                $actLabels = ['added' => 'Added', 'edited' => 'Edited', 'deleted' => 'Deleted'];
+                $filterLabel = $actLabels[$actFilter] ?? 'All Actions';
+            @endphp
+            <div class="active-filter-title"><i class="bi bi-funnel-fill"></i> {{ $filterLabel }}</div>
             <table>
                 <colgroup>
                     <col style="width: 25%">
@@ -125,27 +119,41 @@
                                 <span class="badge {{ $badgeClass }}">{{ ucfirst($log->action) }}</span>
                                 
                                 @if($log->action === 'edited' && $log->old_values && $log->new_values)
-                                    <div class="change-details" style="font-size: 0.75rem; color: #636e72; margin-top: 0.4rem; font-weight: normal; line-height: 1.4;">
+                                    <div class="change-details-container">
                                         @php
-                                            $changes = [];
                                             $old = $log->old_values;
                                             $new = $log->new_values;
-                                            
-                                            if (($old['name'] ?? null) !== ($new['name'] ?? null)) 
-                                                $changes[] = 'Name: ' . ($old['name'] ?? 'N/A') . ' → ' . ($new['name'] ?? 'N/A');
-                                            
-                                            if (($old['category'] ?? null) !== ($new['category'] ?? null)) 
-                                                $changes[] = 'Category: ' . ucfirst($old['category'] ?? 'N/A') . ' → ' . ucfirst($new['category'] ?? 'N/A');
-                                            
-                                            if ((float)($old['price'] ?? 0) !== (float)($new['price'] ?? 0)) 
-                                                $changes[] = 'Price: ₱' . number_format($old['price'] ?? 0, 2) . ' → ₱' . number_format($new['price'] ?? 0, 2);
-                                            
-                                            if (($old['image'] ?? null) !== ($new['image'] ?? null)) 
-                                                $changes[] = 'Photo updated';
                                         @endphp
-                                        @foreach($changes as $change)
-                                            <div><i class="bi bi-dot"></i> {{ $change }}</div>
-                                        @endforeach
+                                        @if(($old['name'] ?? null) !== ($new['name'] ?? null))
+                                            <div class="change-detail-row">
+                                                <span class="change-label">Name</span>
+                                                <span class="change-old">{{ $old['name'] ?? 'N/A' }}</span>
+                                                <i class="bi bi-arrow-right change-arrow"></i>
+                                                <span class="change-new">{{ $new['name'] ?? 'N/A' }}</span>
+                                            </div>
+                                        @endif
+                                        @if(($old['category'] ?? null) !== ($new['category'] ?? null))
+                                            <div class="change-detail-row">
+                                                <span class="change-label">Category</span>
+                                                <span class="change-old">{{ ucfirst($old['category'] ?? 'N/A') }}</span>
+                                                <i class="bi bi-arrow-right change-arrow"></i>
+                                                <span class="change-new">{{ ucfirst($new['category'] ?? 'N/A') }}</span>
+                                            </div>
+                                        @endif
+                                        @if((float)($old['price'] ?? 0) !== (float)($new['price'] ?? 0))
+                                            <div class="change-detail-row">
+                                                <span class="change-label">Price</span>
+                                                <span class="change-old">₱{{ number_format($old['price'] ?? 0, 2) }}</span>
+                                                <i class="bi bi-arrow-right change-arrow"></i>
+                                                <span class="change-new">₱{{ number_format($new['price'] ?? 0, 2) }}</span>
+                                            </div>
+                                        @endif
+                                        @if(($old['image'] ?? null) !== ($new['image'] ?? null))
+                                            <div class="change-detail-row">
+                                                <span class="change-label">Photo</span>
+                                                <span class="change-new" style="text-decoration: none;">Updated</span>
+                                            </div>
+                                        @endif
                                     </div>
                                 @endif
                             </td>

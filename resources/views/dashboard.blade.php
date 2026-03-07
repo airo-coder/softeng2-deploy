@@ -10,11 +10,12 @@
     <div class="parent-container">
         <div class="report-header">
             <div class="report-title">
+                <div class="print-header"><h1>Financial Dashboard</h1><p>Generated on {{ now()->format('F d, Y') }}</p></div>
                 <h1>Financial Dashboard</h1>
                 <p class="text-muted">High-level performance overview and key metrics.</p>
             </div>
             <div class="report-actions">
-                <button class="export-btn" data-export-name="financial-dashboard" onclick="exportTableToCSV('financial-dashboard')">
+                <button class="export-btn" data-export-name="financial-dashboard" data-export-type="print">
                     <i class="fa-solid fa-print"></i>
                     <span>Export Financial Report</span>
                 </button>

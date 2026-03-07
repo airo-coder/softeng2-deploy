@@ -292,3 +292,22 @@
         grid-template-columns: 1fr;
     }
 }
+
+@media print {
+    .kpi-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.5rem !important;
+    }
+    .report-grid {
+        display: block !important;
+    }
+    .chart-container, .data-table-card {
+        page-break-inside: avoid !important;
+        margin-bottom: 2rem !important;
+        height: auto !important;
+        width: 100% !important;
+    }
+    .kpi-card {
+        page-break-inside: avoid !important;
+    }
+}

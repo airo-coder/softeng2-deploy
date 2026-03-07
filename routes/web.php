@@ -9,6 +9,8 @@ use App\Http\Controllers\KitchenProductionController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\POSController;
 
+use App\Http\Controllers\ExportController;
+
 // Login Route
 Route::get('/', function () {return view('login');})->name('login');
 Route::post('/login', [AuthorizationController::class, 'login'])->name('login.submit')->middleware('throttle:5,2');
@@ -89,4 +91,16 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
     Route::get('/pricinghistory', [ProductAuditLogController::class, 'index'])->name('pricing-history');
     Route::get('/wastelogs', [ProductAuditLogController::class, 'wasteLogs'])->name('waste.logs');
+});
+
+// === Export Routes (Authenticated) ===
+Route::middleware('auth')->prefix('export')->group(function () {
+    Route::get('/pos-history', [ExportController::class, 'posHistory'])->name('export.pos-history');
+    Route::get('/pricing-history', [ExportController::class, 'pricingHistory'])->name('export.pricing-history');
+    Route::get('/stock-history', [ExportController::class, 'stockHistory'])->name('export.stock-history');
+    Route::get('/ingredient-history', [ExportController::class, 'ingredientHistory'])->name('export.ingredient-history');
+    Route::get('/kitchen-logs', [ExportController::class, 'kitchenLogs'])->name('export.kitchen-logs');
+    Route::get('/waste-logs', [ExportController::class, 'wasteLogs'])->name('export.waste-logs');
+    Route::get('/cost-variance', [ExportController::class, 'costVariance'])->name('export.cost-variance');
+    Route::get('/yield-forecasting', [ExportController::class, 'yieldForecasting'])->name('export.yield-forecasting');
 });

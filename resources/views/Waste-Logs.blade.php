@@ -56,11 +56,21 @@
                         />
                     </form>
                 </div>
+                <button class="export-audit-log-button" data-export-name="waste-logs" data-export-url="/export/waste-logs" style="margin-left:auto;">
+                    <i class="fa-solid fa-print"></i>
+                    <span>Export Waste Logs</span>
+                </button>
             </div>
         </div>
 
         <!-- MAIN TABLE -->
         <div class="table-container">
+            @php
+                $userFilter = request('user_id');
+                $filterUser = $userFilter ? $users->firstWhere('id', $userFilter) : null;
+                $filterLabel = $filterUser ? ($filterUser->first_name . ' ' . $filterUser->last_name) : 'All Waste Logs';
+            @endphp
+            <div class="active-filter-title"><i class="bi bi-funnel-fill"></i> {{ $filterLabel }}</div>
             <table>
                 <colgroup>
                     <col style="width: 25%">

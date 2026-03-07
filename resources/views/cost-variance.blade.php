@@ -11,11 +11,12 @@
     <div class="parent-container">
         <div class="report-header">
             <div class="report-title">
+                <div class="print-header"><h1>Cost & Variance Report</h1><p>Generated on {{ now()->format('F d, Y') }}</p></div>
                 <h1>Cost & Variance Report</h1>
                 <p class="text-muted">Compare theoretical vs. actual ingredient usage to identify waste.</p>
             </div>
             <div class="report-actions">
-                <button class="export-btn" data-export-name="cost-variance-report">
+                <button class="export-btn" data-export-name="cost-variance-report" data-export-url="/export/cost-variance">
                     <i class="fa-solid fa-print"></i>
                     <span>Export Cost & Variance Report</span>
                 </button>

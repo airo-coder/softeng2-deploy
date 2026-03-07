@@ -65,6 +65,11 @@
             </div>
             <!-- BUTTONS ENDS HERE + MAIN BODY (TABLE) STARTS HERE -->
             <div class="table-container">
+                @php
+                    $catFilter = request('filter-category');
+                    $filterLabel = $catFilter ? ucfirst(str_replace('_', ' ', $catFilter)) : 'All Ingredients';
+                @endphp
+                <div class="active-filter-title"><i class="bi bi-funnel-fill"></i> {{ $filterLabel }}</div>
                 <table>
                     <colgroup>
                         <col style="width: 25%">
