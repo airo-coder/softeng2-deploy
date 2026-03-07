@@ -32,7 +32,6 @@
                                     <option value="deleted" {{ request('action') === 'deleted' ? 'selected' : '' }}>Deleted</option>
                                 </select>
                             </div>
-                            </div>
                             <button type="submit" class="apply-filter-button">Apply Filter</button>
                         </form>
                     </div>

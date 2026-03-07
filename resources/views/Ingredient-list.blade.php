@@ -68,8 +68,25 @@
                 @php
                     $catFilter = request('filter-category');
                     $filterLabel = $catFilter ? ucfirst(str_replace('_', ' ', $catFilter)) : 'All Ingredients';
+                    
+                    $catIcons = [
+                        'meat' => '<i class="fa-solid fa-drumstick-bite"></i>',
+                        'produce' => '<i class="fa-solid fa-leaf"></i>',
+                        'condiments' => '<i class="fa-solid fa-bottle-droplet"></i>',
+                        'canned_goods' => '<i class="fa-solid fa-box-archive"></i>',
+                        'spices' => '<i class="fa-solid fa-pepper-hot"></i>',
+                        'sweeteners' => '<i class="fa-solid fa-cubes-stacked"></i>',
+                        'oils' => '<i class="fa-solid fa-jug-detergent"></i>',
+                        'baking' => '<i class="fa-solid fa-bread-slice"></i>',
+                        'thickeners' => '<i class="fa-solid fa-spoon"></i>',
+                        'herb' => '<i class="fa-solid fa-seedling"></i>',
+                        'dairy' => '<i class="fa-solid fa-cheese"></i>',
+                        'grains' => '<i class="fa-solid fa-wheat-awn"></i>',
+                        'others' => '<i class="fa-solid fa-box"></i>'
+                    ];
+                    $icon = $catFilter ? ($catIcons[$catFilter] ?? '<i class="bi bi-funnel-fill"></i>') : '<i class="bi bi-funnel-fill"></i>';
                 @endphp
-                <div class="active-filter-title"><i class="bi bi-funnel-fill"></i> {{ $filterLabel }}</div>
+                <div class="active-filter-title">{!! $icon !!} {{ $filterLabel }}</div>
                 <table>
                     <colgroup>
                         <col style="width: 25%">

@@ -72,7 +72,11 @@
                             <td>{{ $log->total_servings }}</td>
                             <td>
                                 <span class="status-badge status-{{ $log->status }}">
-                                    {{ ucfirst($log->status) }}
+                                    @if($log->status === 'wasted')
+                                        <i class="fa-solid fa-trash-can"></i> Wasted
+                                    @else
+                                        <i class="fa-solid fa-check-circle"></i> Served
+                                    @endif
                                 </span>
                             </td>
                             <td>{{ $log->user ? $log->user->first_name : 'System' }}</td>

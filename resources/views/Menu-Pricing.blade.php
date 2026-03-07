@@ -50,6 +50,12 @@
                     'ready_made' => '<i class="fa-solid fa-box-open"></i>'
                 ];
                 $icon = $catFilter ? ($catIcons[$catFilter] ?? '<i class="bi bi-funnel-fill"></i>') : '<i class="bi bi-funnel-fill"></i>';
+                $catLabels = [
+                    'drinks' => 'Drinks',
+                    'snacks' => 'Snacks',
+                    'meals' => 'Meals',
+                    'ready_made' => 'Ready Made'
+                ];
                 $filterLabel = $catLabels[$catFilter] ?? 'All Products';
             @endphp
             <div class="active-filter-title">{!! $icon !!} {{ $filterLabel }}</div>
