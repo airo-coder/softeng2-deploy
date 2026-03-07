@@ -9,13 +9,13 @@
             <div class="header-container">
                 <div class="filter-and-search-container">
                     <!-- FILTER ICON -->
-                    <div id="filter-button" class="filter-icon">
+                    <div id="filter-button" class="filter-icon-container">
                         <i class="bi bi-funnel"></i>
                     </div>
                     
                     <!-- FILTER DROPDOWN -->
-                    <div class="filter-drop-down-modal" id="filterDropdown">
-                        <form method="GET" action="{{ route('stock-history') }}" class="filter-drop-down-wrapper">
+                    <div class="filter-dropdown" id="filterDropdown">
+                        <form method="GET" action="{{ route('stock-history') }}">
                             <div class="filter-group">
                                 <select name="action">
                                     <option value="">All Actions</option>
@@ -138,4 +138,22 @@
         </div>
     </div>
     <div class="overlay" id="overlay"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButton = document.getElementById('filter-button');
+            const filterDropdown = document.getElementById('filterDropdown');
+            if (filterButton && filterDropdown) {
+                filterButton.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    filterDropdown.classList.toggle('show');
+                });
+                document.addEventListener('click', function(e) {
+                    if (!filterButton.contains(e.target) && !filterDropdown.contains(e.target)) {
+                        filterDropdown.classList.remove('show');
+                    }
+                });
+            }
+        });
+    </script>
 @endsection

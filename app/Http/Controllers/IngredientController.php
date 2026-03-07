@@ -284,7 +284,7 @@ class IngredientController extends Controller
             $query->whereDate('created_at', $request->date);
         }
         $logs = $query->latest()->paginate(10)->withQueryString();
-        $users = \App\Models\User::all();
+        $users = \App\Models\User::whereIn('role', ['admin', 'inventory_manager', 'inventory_manager'])->get();
         return view('stock-history', compact('logs', 'users'));
     }
 

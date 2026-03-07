@@ -18,21 +18,19 @@
                 </form>
             </div>
             <!-- PAYMENT FILTER ADDED -->
-            <div class="filter-container" style="display: flex; align-items: center; background-color: white; border: 1px solid #ccc; border-radius: 6px; padding: 0.2rem 0.5rem; margin-right: 0.5rem;">
-                <div id="filter-button" class="filter-icon-container" style="margin-right:0.5rem; cursor:pointer;">
+            <div style="position:relative; margin-right: 0.5rem;">
+                <div id="filter-button" class="filter-icon-container">
                     <i class="bi bi-funnel"></i>
                 </div>
                 <div class="filter-dropdown" id="filterDropdown">
-                    <form method="GET" action="{{ route('POShistory') }}" class="filter-dropdown-form" style="display:flex; gap:0.5rem;">
+                    <form method="GET" action="{{ route('POShistory') }}">
                         <input type="hidden" name="search" value="{{ request('search') }}">
                         <input type="hidden" name="date" value="{{ request('date') }}">
-                        <div class="filter-group">
-                            <select name="payment_method" style="padding:0.2rem; border-radius:4px; border:1px solid #ccc;" onchange="this.form.submit()">
-                                <option value="">All Payments</option>
-                                <option value="cash" {{ request('payment_method') === 'cash' ? 'selected' : '' }}>Cash</option>
-                                <option value="gcash" {{ request('payment_method') === 'gcash' ? 'selected' : '' }}>GCash</option>
-                            </select>
-                        </div>
+                        <select name="payment_method" onchange="this.form.submit()">
+                            <option value="">All Payments</option>
+                            <option value="cash" {{ request('payment_method') === 'cash' ? 'selected' : '' }}>Cash</option>
+                            <option value="gcash" {{ request('payment_method') === 'gcash' ? 'selected' : '' }}>GCash</option>
+                        </select>
                     </form>
                 </div>
             </div>
@@ -54,7 +52,9 @@
                 $payLabels = ['cash' => 'Cash', 'gcash' => 'GCash'];
                 $filterLabel = $payLabels[$payFilter] ?? 'All Transactions';
             @endphp
-            <div class="active-filter-title" style="font-weight: 600; padding: 1rem 1.5rem; border-bottom: 1px solid #eee; background-color: #f8f9fa;"><i class="bi bi-funnel-fill"></i> {{ $filterLabel }}</div>
+            <div class="active-filter-title" style="font-weight: 600; padding: 1rem 1.5rem; border-bottom: 1px solid #eee; background-color: #f8f9fa;">
+                <i class="bi bi-funnel-fill"></i> {{ $filterLabel }}
+            </div>
             <table>
                 <colgroup>
                     <col style="width: 20%">
@@ -98,4 +98,24 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterButton = document.getElementById('filter-button');
+        const filterDropdown = document.getElementById('filterDropdown');
+
+        if (filterButton && filterDropdown) {
+            filterButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                filterDropdown.classList.toggle('show');
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!filterButton.contains(e.target) && !filterDropdown.contains(e.target)) {
+                    filterDropdown.classList.remove('show');
+                }
+            });
+        }
+    });
+</script>
 @endsection

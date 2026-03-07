@@ -47,10 +47,13 @@
         <div class="main-body-container">
             @php
                 $statusFilter = request('status');
-                $statusLabels = ['served' => 'Served', 'wasted' => 'Wasted'];
-                $filterLabel = $statusLabels[$statusFilter] ?? 'All Status';
+                $statusLabels = [
+                    'served' => '<i class="fa-solid fa-check-circle" style="color: #28a745;"></i> Served', 
+                    'wasted' => '<i class="fa-solid fa-trash-can" style="color: #dc3545;"></i> Wasted'
+                ];
+                $filterLabel = $statusFilter ? ($statusLabels[$statusFilter] ?? '<i class="bi bi-funnel-fill"></i> All Status') : '<i class="bi bi-funnel-fill"></i> All Status';
             @endphp
-            <div class="active-filter-title"><i class="bi bi-funnel-fill"></i> {{ $filterLabel }}</div>
+            <div class="active-filter-title">{!! $filterLabel !!}</div>
             <table>
                 <thead>
                     <tr class="tr">
@@ -72,11 +75,7 @@
                             <td>{{ $log->total_servings }}</td>
                             <td>
                                 <span class="status-badge status-{{ $log->status }}">
-                                    @if($log->status === 'wasted')
-                                        <i class="fa-solid fa-trash-can"></i> Wasted
-                                    @else
-                                        <i class="fa-solid fa-check-circle"></i> Served
-                                    @endif
+                                    {{ ucfirst($log->status) }}
                                 </span>
                             </td>
                             <td>{{ $log->user ? $log->user->first_name : 'System' }}</td>
