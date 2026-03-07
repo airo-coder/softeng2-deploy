@@ -135,6 +135,10 @@
                     Change: <strong id="changeAmount">₱0.00</strong>
                 </div>
             </div>
+            <div class="form-group" id="referenceNumberGroup" style="display:none;">
+                <label>Reference Number</label>
+                <input type="text" id="referenceNumber" class="input" placeholder="Enter GCash reference number">
+            </div>
             <div id="checkoutError" class="alert alert-error" style="display:none;"></div>
             <div class="form-actions">
                 <button type="button" class="cancel-button" id="cancelCheckout">Cancel</button>

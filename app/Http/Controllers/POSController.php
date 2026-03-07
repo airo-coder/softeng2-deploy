@@ -37,6 +37,7 @@ class POSController extends Controller
             'items.*.product_id' => 'required|exists:products,id',
             'items.*.quantity' => 'required|integer|min:1',
             'payment_method' => 'required|in:cash,gcash',
+            'reference_number' => 'nullable|string|max:255',
             'amount_paid' => 'required|numeric|min:0',
         ]);
 
@@ -84,6 +85,7 @@ class POSController extends Controller
                 'order_id' => $orderId,
                 'total_amount' => $totalAmount,
                 'payment_method' => $validated['payment_method'],
+                'reference_number' => $validated['reference_number'] ?? null,
                 'amount_paid' => $validated['amount_paid'],
                 'change_amount' => $changeAmount,
                 'status' => 'completed',
@@ -103,6 +105,7 @@ class POSController extends Controller
                 'order_id' => $orderId,
                 'total_amount' => $totalAmount,
                 'payment_method' => $validated['payment_method'],
+                'reference_number' => $validated['reference_number'] ?? null,
                 'amount_paid' => $validated['amount_paid'],
                 'change_amount' => $changeAmount,
                 'items' => $itemsData,

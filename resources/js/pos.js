@@ -128,15 +128,45 @@ document.addEventListener('DOMContentLoaded', () => {
         if (cart.length === 0) return;
         const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
         document.getElementById('checkoutTotalDisplay').textContent = `₱${total.toFixed(2)}`;
+        
+        // Reset modal fields
         document.getElementById('amountPaid').value = '';
+        const refInput = document.getElementById('referenceNumber');
+        if (refInput) refInput.value = '';
+        
         document.getElementById('changeDisplay').style.display = 'none';
         document.getElementById('checkoutError').style.display = 'none';
+        
+        // Reset to cash layout by default
+        const cashRadio = document.querySelector('input[name="payment_method"][value="cash"]');
+        if (cashRadio) cashRadio.checked = true;
+        const amountPaidGroup = document.getElementById('amountPaidGroup');
+        const refGroup = document.getElementById('referenceNumberGroup');
+        if (amountPaidGroup) amountPaidGroup.style.display = 'block';
+        if (refGroup) refGroup.style.display = 'none';
+
         checkoutModal.classList.add('active');
         openOverlay();
     });
 
     document.getElementById('closeCheckout')?.addEventListener('click', closeAll);
     document.getElementById('cancelCheckout')?.addEventListener('click', closeAll);
+
+    // Toggle Payment Method Fields
+    document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            const amountPaidGroup = document.getElementById('amountPaidGroup');
+            const referenceNumberGroup = document.getElementById('referenceNumberGroup');
+            
+            if (e.target.value === 'gcash') {
+                if (amountPaidGroup) amountPaidGroup.style.display = 'none';
+                if (referenceNumberGroup) referenceNumberGroup.style.display = 'block';
+            } else {
+                if (amountPaidGroup) amountPaidGroup.style.display = 'block';
+                if (referenceNumberGroup) referenceNumberGroup.style.display = 'none';
+            }
+        });
+    });
 
     // Amount tendered change calculation
     document.getElementById('amountPaid')?.addEventListener('input', function() {
@@ -157,13 +187,27 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('confirmPayment')?.addEventListener('click', async () => {
         const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
         const paymentMethod = document.querySelector('input[name="payment_method"]:checked')?.value;
-        const amountPaid = parseFloat(document.getElementById('amountPaid').value) || 0;
         const errorDiv = document.getElementById('checkoutError');
+        
+        let amountPaid = 0;
+        let referenceNumber = null;
 
-        if (amountPaid < total) {
-            errorDiv.textContent = 'Amount tendered is less than the total.';
-            errorDiv.style.display = 'block';
-            return;
+        if (paymentMethod === 'gcash') {
+            amountPaid = total; // GCash implies exact payment electronically
+            const refInput = document.getElementById('referenceNumber');
+            referenceNumber = refInput ? refInput.value.trim() : '';
+            if (!referenceNumber) {
+                errorDiv.textContent = 'Please enter the GCash reference number.';
+                errorDiv.style.display = 'block';
+                return;
+            }
+        } else {
+            amountPaid = parseFloat(document.getElementById('amountPaid').value) || 0;
+            if (amountPaid < total) {
+                errorDiv.textContent = 'Amount tendered is less than the total.';
+                errorDiv.style.display = 'block';
+                return;
+            }
         }
 
         errorDiv.style.display = 'none';
@@ -180,6 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     items: cart.map(item => ({ product_id: item.id, quantity: item.quantity })),
                     payment_method: paymentMethod,
                     amount_paid: amountPaid,
+                    reference_number: referenceNumber
                 })
             });
 
@@ -210,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="receipt-info-row"><span>Order ID</span><span>${data.order_id}</span></div>
                 <div class="receipt-info-row"><span>Date</span><span>${data.date}</span></div>
                 <div class="receipt-info-row"><span>Cashier</span><span>${data.cashier}</span></div>
-                <div class="receipt-info-row"><span>Payment</span><span>${data.payment_method.toUpperCase()}</span></div>
+                <div class="receipt-info-row"><span>Payment</span><span>${data.payment_method.toUpperCase()} ${data.reference_number ? '(' + data.reference_number + ')' : ''}</span></div>
             </div>
             <hr class="receipt-divider">
             ${data.items.map(item => `

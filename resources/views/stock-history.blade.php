@@ -138,22 +138,4 @@
         </div>
     </div>
     <div class="overlay" id="overlay"></div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const filterButton = document.getElementById('filter-button');
-            const filterDropdown = document.getElementById('filterDropdown');
-            if (filterButton && filterDropdown) {
-                filterButton.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    filterDropdown.classList.toggle('show');
-                });
-                document.addEventListener('click', function(e) {
-                    if (!filterButton.contains(e.target) && !filterDropdown.contains(e.target)) {
-                        filterDropdown.classList.remove('show');
-                    }
-                });
-            }
-        });
-    </script>
 @endsection

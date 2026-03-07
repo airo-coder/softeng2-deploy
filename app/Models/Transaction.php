@@ -9,6 +9,7 @@ class Transaction extends Model
         'order_id',
         'total_amount',
         'payment_method',
+        'reference_number',
         'amount_paid',
         'change_amount',
         'status',

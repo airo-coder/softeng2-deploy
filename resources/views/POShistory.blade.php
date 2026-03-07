@@ -83,6 +83,9 @@
                             <td>
                                 <span class="payment-badge payment-{{ $txn->payment_method }}">
                                     {{ ucfirst($txn->payment_method) }}
+                                    @if($txn->payment_method === 'gcash' && $txn->reference_number)
+                                        (Ref: {{ $txn->reference_number }})
+                                    @endif
                                 </span>
                             </td>
                             <td class="amount-cell">₱{{ number_format($txn->total_amount, 2) }}</td>

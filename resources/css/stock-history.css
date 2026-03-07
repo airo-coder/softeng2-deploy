@@ -104,7 +104,7 @@
 
 .apply-filter-button {
     width: 100%;
-    background-color: #2d3436;
+    background-color: #d63031; /* UM Red by default */
     color: white;
     padding: 0.8rem 1.2rem;
     border-radius: 0.8rem;
@@ -115,7 +115,7 @@
 }
 
 .apply-filter-button:hover {
-    background-color: #ff0000;
+    background-color: #b71c1c; /* Darker red on hover */
 }
 
 .search-form {
