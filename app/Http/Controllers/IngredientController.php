@@ -28,7 +28,7 @@ class IngredientController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:ingredients,name',
             'category' => 'required|string|max:255',
             'unit' => 'required|string|max:50',
             'cost_per_unit' => 'required|numeric|min:0',
@@ -66,7 +66,7 @@ class IngredientController extends Controller
     public function update(Request $request, Ingredient $ingredient)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:ingredients,name,' . $ingredient->id,
             'category' => 'required|string|max:255',
             'unit' => 'required|string|max:50',
             'cost_per_unit' => 'required|numeric|min:0.01',

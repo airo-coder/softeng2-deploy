@@ -5,8 +5,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const receiptModal = document.getElementById('receiptModal');
     let shouldReload = false;
 
+    // ===== CART PERSISTENCE: Load from localStorage =====
+    const CART_KEY = 'posCart';
+    let cart = [];
+    try {
+        const saved = localStorage.getItem(CART_KEY);
+        if (saved) cart = JSON.parse(saved);
+    } catch (e) {
+        cart = [];
+    }
 
-    let cart = []; // { id, name, price, quantity }
+    function saveCart() {
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    }
+
+    function clearCartStorage() {
+        localStorage.removeItem(CART_KEY);
+    }
 
     // Helpers
     const openOverlay = () => overlay?.classList.add('show');
@@ -19,6 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.reload();
         }
     }
+
+    // Initialize cart rendering on load
+    renderCart();
 
     // ===== PRODUCT CARDS: Add to cart =====
     document.querySelectorAll('.pos-product-card').forEach(card => {
@@ -47,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             card.classList.add('added');
             setTimeout(() => card.classList.remove('added'), 500);
+            saveCart();
             renderCart();
         });
     });
@@ -99,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Bind qty buttons
         container.querySelectorAll('.qty-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 const index = parseInt(this.dataset.index);
                 const action = this.dataset.action;
                 if (action === 'increase') {
@@ -112,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     cart[index].quantity--;
                     if (cart[index].quantity <= 0) cart.splice(index, 1);
                 }
+                saveCart();
                 renderCart();
             });
         });
@@ -120,6 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ===== CLEAR CART =====
     document.getElementById('clearCart')?.addEventListener('click', () => {
         cart = [];
+        clearCartStorage();
         renderCart();
     });
 
@@ -128,15 +149,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (cart.length === 0) return;
         const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
         document.getElementById('checkoutTotalDisplay').textContent = `₱${total.toFixed(2)}`;
-        
+
         // Reset modal fields
         document.getElementById('amountPaid').value = '';
         const refInput = document.getElementById('referenceNumber');
         if (refInput) refInput.value = '';
-        
+
         document.getElementById('changeDisplay').style.display = 'none';
         document.getElementById('checkoutError').style.display = 'none';
-        
+
         // Reset to cash layout by default
         const cashRadio = document.querySelector('input[name="payment_method"][value="cash"]');
         if (cashRadio) cashRadio.checked = true;
@@ -157,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
         radio.addEventListener('change', (e) => {
             const amountPaidGroup = document.getElementById('amountPaidGroup');
             const referenceNumberGroup = document.getElementById('referenceNumberGroup');
-            
+
             if (e.target.value === 'gcash') {
                 if (amountPaidGroup) amountPaidGroup.style.display = 'none';
                 if (referenceNumberGroup) referenceNumberGroup.style.display = 'block';
@@ -169,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Amount tendered change calculation
-    document.getElementById('amountPaid')?.addEventListener('input', function() {
+    document.getElementById('amountPaid')?.addEventListener('input', function () {
         const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
         const paid = parseFloat(this.value) || 0;
         const changeDiv = document.getElementById('changeDisplay');
@@ -188,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
         const paymentMethod = document.querySelector('input[name="payment_method"]:checked')?.value;
         const errorDiv = document.getElementById('checkoutError');
-        
+
         let amountPaid = 0;
         let referenceNumber = null;
 
@@ -235,6 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 checkoutModal?.classList.remove('active');
                 showReceipt(data);
                 cart = [];
+                clearCartStorage();
                 renderCart();
                 shouldReload = true;
             } else {

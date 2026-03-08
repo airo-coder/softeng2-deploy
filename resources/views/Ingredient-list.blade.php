@@ -6,6 +6,16 @@
         {{ session('success') }}
     </div>
 @endif
+
+@if ($errors->any())
+    <div class="my-alert alert-danger" style="background-color: #f82b2b1a; border-left: 5px solid #d63031; padding: 1rem; margin-bottom: 1rem; border-radius: 4px; color: #d63031;">
+        <ul style="margin: 0; padding-left: 1.5rem;">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     @vite(['resources/css/ingredient-list.css'])
     @vite(['resources/js/ingredient-list.js'])
