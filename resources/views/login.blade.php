@@ -15,7 +15,7 @@
         <div class="login-container">
             <div class="design-container">
                 <div class="logo-with-dining-center-text">
-                    <img src="{{ asset('photos/UMDiningcenter.png') }}" alt="UM Dining Center" class ="login-logoDiningCenter">
+                    <img src="{{ asset('photos/UMDiningCenter.png') }}" alt="UM Dining Center" class ="login-logoDiningCenter">
                 </div>
                 <hr>
             </div>
