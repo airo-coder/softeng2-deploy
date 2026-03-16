@@ -16,4 +16,5 @@ php artisan view:cache
 php artisan migrate --force
 
 # Start Apache in foreground
+chmod -R 777 /var/www/html/storage
 apache2-foreground
