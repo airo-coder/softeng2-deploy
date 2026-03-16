@@ -17,7 +17,7 @@
     <!-- LOGO DROP DOWN  -->
     <div class="logo-and-drop-down-container">
         <div class="logo-container">
-            <img src="{{asset('photos/UMDiningcenter.png')}}" alt="UM Dining Center" class ="sidebar-container-logo">
+            <img src="{{asset('photos/UMDiningCenter.png')}}" alt="UM Dining Center" class ="sidebar-container-logo">
             <img src="{{asset('favicon.png')}}" alt="UM Dining Center" class ="sidebar-logo-collapsed">
         </div>
         <div class="drop-down-container" style="display: flex; align-items: center; gap: 0.5rem;">

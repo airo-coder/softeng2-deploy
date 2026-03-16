@@ -14,6 +14,8 @@ php artisan view:cache
 
 # Run database migrations
 php artisan migrate --force
+# Create storage symlink for uploaded images
+php artisan storage:link
 
 # Start Apache in foreground
 chmod -R 777 /var/www/html/storage

