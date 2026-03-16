@@ -10,9 +10,8 @@ class AuthorizationController extends Controller
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
-        // Password bypass removed for security
 
-        if (Auth::check() || Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
             // Redirect to role-specific landing page
@@ -27,5 +26,13 @@ class AuthorizationController extends Controller
         return back()->withErrors([
             'email' => 'Invalid email or password.',
         ])->withInput();
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('login');
     }
 }

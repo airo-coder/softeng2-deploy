@@ -194,9 +194,10 @@
         </div>
         @endif
     </div>
-    <form action="{{ route('login') }}" style="margin-top: auto;">
+    <form method="POST" action="{{ route('logout') }}" style="margin-top: auto;">
+        @csrf
         <div class="logout-button-wrapper">
-            <button class="logout-button">
+            <button class="logout-button" type="submit">
                 <i class="fa-solid fa-right-from-bracket me-3" style="color: red;"></i>
                 <span class="subsystem-span">Logout</span>
             </button>

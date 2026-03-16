@@ -14,6 +14,7 @@ use App\Http\Controllers\ExportController;
 // Login Route
 Route::get('/', function () {return view('login');})->name('login');
 Route::post('/login', [AuthorizationController::class, 'login'])->name('login.submit')->middleware('throttle:5,2');
+Route::post('/logout', [AuthorizationController::class, 'logout'])->name('logout')->middleware('auth');
 
 // Main dashboard route — redirect to role-specific page
 Route::get('/main', function () {

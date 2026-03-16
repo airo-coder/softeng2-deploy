@@ -127,11 +127,11 @@ class ReportController extends Controller
                 'ingredients.unit',
                 'ingredients.cost_per_unit',
                 DB::raw('(SELECT SUM(quantity_deducted) FROM kitchen_stock_deductions WHERE ingredient_id = ingredients.id) as actual_usage'),
-                DB::raw('(SELECT SUM(kpl.times_cooked * r.quantity) 
+                DB::raw("(SELECT SUM(kpl.times_cooked * r.quantity) 
                           FROM kitchen_production_logs kpl 
                           JOIN recipes r ON kpl.product_id = r.product_id 
                           WHERE r.ingredient_id = ingredients.id 
-                          AND kpl.status IN ("done", "served")) as theoretical_usage')
+                          AND kpl.status IN ('done', 'served')) as theoretical_usage")
             )
             ->get();
 

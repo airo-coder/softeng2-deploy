@@ -9,12 +9,12 @@
             <div class="header-container">
                 <div class="filter-and-search-container">
                     <!-- FILTER ICON -->
-                    <div id="filter-button" class="filter-icon">
+                    <div id="filter-button" class="filter-icon-container">
                         <i class="bi bi-funnel"></i>
                     </div>
                     
                     <!-- FILTER DROPDOWN -->
-                    <div class="filter-drop-down-modal" id="filterDropdown">
+                    <div class="filter-dropdown" id="filterDropdown">
                         <form method="GET" action="{{ route('ingredient-history') }}" class="filter-drop-down-wrapper">
                             <div class="filter-group">
                                 <select name="action">

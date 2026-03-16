@@ -246,7 +246,6 @@ class IngredientController extends Controller
             // ADD AUDIT LOG
             \App\Models\IngredientAuditLog::create([
                 'user_id' => \Illuminate\Support\Facades\Auth::id(),
-                'ingredient_id' => null, // It's a product
                 'action' => 'stock_in',
                 'ingredient_name' => $product->name . ' (Product)',
                 'unit_cost' => $product->price,
@@ -322,9 +321,9 @@ class IngredientController extends Controller
                 'ingredients.name',
                 'ingredients.unit',
                 'ingredients.stock as actual_stock',
-                DB::raw('(SELECT SUM(quantity_changed) FROM ingredient_audit_logs WHERE ingredient_id = ingredients.id AND action = "stock_in") as total_in'),
-                DB::raw('(SELECT SUM(quantity_changed) FROM ingredient_audit_logs WHERE ingredient_id = ingredients.id AND action = "stock_out") as total_out'),
-                DB::raw('(SELECT SUM(quantity_changed) FROM ingredient_audit_logs WHERE ingredient_id = ingredients.id AND action = "created") as initial_stock')
+                DB::raw("(SELECT SUM(quantity_changed) FROM ingredient_audit_logs WHERE ingredient_id = ingredients.id AND action = 'stock_in') as total_in"),
+                DB::raw("(SELECT SUM(quantity_changed) FROM ingredient_audit_logs WHERE ingredient_id = ingredients.id AND action = 'stock_out') as total_out"),
+                DB::raw("(SELECT SUM(quantity_changed) FROM ingredient_audit_logs WHERE ingredient_id = ingredients.id AND action = 'created') as initial_stock")
             )
             ->get();
 
