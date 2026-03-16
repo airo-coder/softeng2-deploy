@@ -12,7 +12,7 @@ use App\Http\Controllers\POSController;
 use App\Http\Controllers\ExportController;
 
 // Login Route
-Route::get('/', function () {return view('login');})->name('login');
+Route::get('/', function () {return view('login');})->name('login')->middleware('guest');
 Route::post('/login', [AuthorizationController::class, 'login'])->name('login.submit')->middleware('throttle:5,2');
 Route::post('/logout', [AuthorizationController::class, 'logout'])->name('logout')->middleware('auth');
 
