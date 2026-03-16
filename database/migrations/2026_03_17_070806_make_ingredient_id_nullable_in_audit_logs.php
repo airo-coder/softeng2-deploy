@@ -13,7 +13,11 @@ return new class extends Migration
     public function up(): void
     {
         // Drop the non-null constraint forcefully for PostgreSQL
-        DB::statement('ALTER TABLE ingredient_audit_logs ALTER COLUMN ingredient_id DROP NOT NULL;');
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement('ALTER TABLE ingredient_audit_logs ALTER COLUMN ingredient_id DROP NOT NULL;');
+        } else {
+            DB::statement('ALTER TABLE ingredient_audit_logs MODIFY ingredient_id bigint unsigned null;');
+        }
     }
 
     /**
@@ -22,6 +26,10 @@ return new class extends Migration
     public function down(): void
     {
         // Revert the non-null constraint
-        DB::statement('ALTER TABLE ingredient_audit_logs ALTER COLUMN ingredient_id SET NOT NULL;');
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement('ALTER TABLE ingredient_audit_logs ALTER COLUMN ingredient_id SET NOT NULL;');
+        } else {
+            DB::statement('ALTER TABLE ingredient_audit_logs MODIFY ingredient_id bigint unsigned not null;');
+        }
     }
 };
