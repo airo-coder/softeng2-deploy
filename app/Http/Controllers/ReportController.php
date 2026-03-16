@@ -34,7 +34,7 @@ class ReportController extends Controller
             ->select(
                 'kitchen_production_logs.product_id',
                 DB::raw('SUM(kitchen_production_logs.total_servings) as total_servings'),
-                DB::raw('SUM(kitchen_stock_deductions.quantity_deducted * COALESCE(NULLIF(kitchen_stock_deductions.cost_per_unit, 0), (SELECT cost_per_unit FROM ingredients WHERE ingredients.id = kitchen_stock_deductions.ingredient_id))) as total_production_cost')
+                DB::raw('SUM(kitchen_stock_deductions.quantity_deducted * (SELECT cost_per_unit FROM ingredients WHERE ingredients.id = kitchen_stock_deductions.ingredient_id)) as total_production_cost')
             )
             ->groupBy('kitchen_production_logs.product_id')
             ->get()
@@ -58,7 +58,7 @@ class ReportController extends Controller
         $wasteCost = DB::table('kitchen_stock_deductions')
             ->join('kitchen_production_logs', 'kitchen_stock_deductions.kitchen_production_log_id', '=', 'kitchen_production_logs.id')
             ->where('kitchen_production_logs.status', 'wasted')
-            ->select(DB::raw('SUM(kitchen_stock_deductions.quantity_deducted * COALESCE(NULLIF(kitchen_stock_deductions.cost_per_unit, 0), (SELECT cost_per_unit FROM ingredients WHERE ingredients.id = kitchen_stock_deductions.ingredient_id))) as total_cost'))
+            ->select(DB::raw('SUM(kitchen_stock_deductions.quantity_deducted * (SELECT cost_per_unit FROM ingredients WHERE ingredients.id = kitchen_stock_deductions.ingredient_id)) as total_cost'))
             ->value('total_cost') ?? 0;
 
         $grossProfit = $totalRevenue - $totalCost;
@@ -275,7 +275,7 @@ class ReportController extends Controller
             ->whereDate('kitchen_production_logs.created_at', $date)
             ->select(
                 'kitchen_production_logs.status',
-                DB::raw('SUM(kitchen_stock_deductions.quantity_deducted * COALESCE(NULLIF(kitchen_stock_deductions.cost_per_unit, 0), (SELECT cost_per_unit FROM ingredients WHERE ingredients.id = kitchen_stock_deductions.ingredient_id))) as total_cost')
+                DB::raw('SUM(kitchen_stock_deductions.quantity_deducted * (SELECT cost_per_unit FROM ingredients WHERE ingredients.id = kitchen_stock_deductions.ingredient_id)) as total_cost')
             )
             ->groupBy('kitchen_production_logs.status')
             ->get()
