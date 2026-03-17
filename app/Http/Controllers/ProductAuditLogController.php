@@ -12,7 +12,7 @@ class ProductAuditLogController extends Controller
         $query = ProductAuditLog::with('user')->latest();
 
         if ($request->filled('search')) {
-            $query->where('product_name', 'like', '%' . $request->search . '%');
+            $query->where('product_name', 'ilike', '%' . $request->search . '%');
         }
 
         if ($request->filled('date')) {
@@ -35,11 +35,11 @@ class ProductAuditLogController extends Controller
     public function wasteLogs(Request $request)
     {
         $query = ProductAuditLog::with('user')
-            ->where('action', 'LIKE', 'Wasted%')
+            ->where('action', 'ILIKE', 'Wasted%')
             ->latest();
 
         if ($request->filled('search')) {
-            $query->where('product_name', 'like', '%' . $request->search . '%');
+            $query->where('product_name', 'ilike', '%' . $request->search . '%');
         }
 
         if ($request->filled('date')) {
@@ -52,7 +52,7 @@ class ProductAuditLogController extends Controller
         }
 
         $users = User::whereIn('id',
-            ProductAuditLog::where('action', 'LIKE', 'Wasted%')->pluck('user_id')->unique()
+            ProductAuditLog::where('action', 'ILIKE', 'Wasted%')->pluck('user_id')->unique()
         )->orderBy('first_name')->get();
         $logs = $query->paginate(10)->withQueryString();
         return view('Waste-Logs', compact('logs', 'users'));

@@ -11,7 +11,7 @@ class IngredientController extends Controller
     {
         $ingredients = Ingredient::query();
         if ($request->filled('search')) {
-            $ingredients->where('name', 'like', '%' . $request->search . '%');
+            $ingredients->where('name', 'ilike', '%' . $request->search . '%');
         }
         if ($request->filled('filter-category')) {
             $ingredients->where('category', $request->input('filter-category'));
@@ -243,9 +243,10 @@ class IngredientController extends Controller
             $oldStock = $product->stock;
             $product->increment('stock', $validated['quantity']);
 
-            // ADD AUDIT LOG
+            // ADD AUDIT LOG — ingredient_id is null for product stock-ins
             \App\Models\IngredientAuditLog::create([
                 'user_id' => \Illuminate\Support\Facades\Auth::id(),
+                'ingredient_id' => null,
                 'action' => 'stock_in',
                 'ingredient_name' => $product->name . ' (Product)',
                 'unit_cost' => $product->price,
@@ -277,7 +278,7 @@ class IngredientController extends Controller
             $query->where('user_id', $request->user_id);
         }
         if ($request->filled('search')) {
-            $query->where('ingredient_name', 'like', '%' . $request->search . '%');
+            $query->where('ingredient_name', 'ilike', '%' . $request->search . '%');
         }
         if ($request->filled('date')) {
             $query->whereDate('created_at', $request->date);
@@ -299,7 +300,7 @@ class IngredientController extends Controller
             $query->where('action', $request->action);
         }
         if ($request->filled('search')) {
-            $query->where('ingredient_name', 'like', '%' . $request->search . '%');
+            $query->where('ingredient_name', 'ilike', '%' . $request->search . '%');
         }
         if ($request->filled('date')) {
             $query->whereDate('created_at', $request->date);

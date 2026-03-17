@@ -62,7 +62,7 @@ class DatabaseSeeder extends Seeder
                     'last_name'  => 'User',
                     'email'      => 'admin@udc.com',
                     'role'       => 'admin',
-                    'password'   => bcrypt('admin123'),
+                    'password'   => 'admin123',
                     'is_active'  => true,
                 ],
                 [
@@ -70,7 +70,7 @@ class DatabaseSeeder extends Seeder
                     'last_name'  => 'Staff',
                     'email'      => 'cashier@udc.com',
                     'role'       => 'cashier',
-                    'password'   => bcrypt('cashier123'),
+                    'password'   => 'cashier123',
                     'is_active'  => true,
                 ],
                 [
@@ -78,7 +78,7 @@ class DatabaseSeeder extends Seeder
                     'last_name'  => 'Manager',
                     'email'      => 'kitchen@udc.com',
                     'role'       => 'kitchen_manager',
-                    'password'   => bcrypt('kitchen123'),
+                    'password'   => 'kitchen123',
                     'is_active'  => true,
                 ],
                 [
@@ -86,7 +86,7 @@ class DatabaseSeeder extends Seeder
                     'last_name'  => 'Manager',
                     'email'      => 'inventory@udc.com',
                     'role'       => 'inventory_manager',
-                    'password'   => bcrypt('inventory123'),
+                    'password'   => 'inventory123',
                     'is_active'  => true,
                 ],
             ];

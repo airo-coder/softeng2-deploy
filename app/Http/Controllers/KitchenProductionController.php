@@ -270,7 +270,7 @@ class KitchenProductionController extends Controller
         $query = KitchenProductionLog::with(['user', 'deductions'])->latest();
 
         if ($request->filled('search')) {
-            $query->where('product_name', 'like', '%' . $request->search . '%');
+            $query->where('product_name', 'ilike', '%' . $request->search . '%');
         }
         if ($request->filled('date')) {
             $query->whereDate('created_at', $request->date);

@@ -18,7 +18,7 @@ class ExportController extends Controller
         $query = Transaction::with(['items', 'user'])->latest();
         $this->applyDateRange($query, $request);
         if ($request->filled('search')) {
-            $query->where('order_id', 'like', '%' . $request->search . '%');
+            $query->where('order_id', 'ilike', '%' . $request->search . '%');
         }
         $rows = $query->get();
 
@@ -44,7 +44,7 @@ class ExportController extends Controller
         $query = ProductAuditLog::with('user')->latest();
         $this->applyDateRange($query, $request);
         if ($request->filled('search')) {
-            $query->where('product_name', 'like', '%' . $request->search . '%');
+            $query->where('product_name', 'ilike', '%' . $request->search . '%');
         }
         if ($request->filled('action')) {
             $query->where('action', $request->action);
@@ -73,7 +73,7 @@ class ExportController extends Controller
         $query = IngredientAuditLog::with('user')->whereIn('action', ['stock_in', 'stock_out'])->latest();
         $this->applyDateRange($query, $request);
         if ($request->filled('search')) {
-            $query->where('ingredient_name', 'like', '%' . $request->search . '%');
+            $query->where('ingredient_name', 'ilike', '%' . $request->search . '%');
         }
         if ($request->filled('action')) {
             $query->where('action', $request->action);
@@ -102,7 +102,7 @@ class ExportController extends Controller
         $query = IngredientAuditLog::with('user')->whereIn('action', ['created', 'edited', 'deleted'])->latest();
         $this->applyDateRange($query, $request);
         if ($request->filled('search')) {
-            $query->where('ingredient_name', 'like', '%' . $request->search . '%');
+            $query->where('ingredient_name', 'ilike', '%' . $request->search . '%');
         }
         if ($request->filled('action')) {
             $query->where('action', $request->action);
@@ -131,7 +131,7 @@ class ExportController extends Controller
         $query = KitchenProductionLog::with(['user', 'deductions'])->latest();
         $this->applyDateRange($query, $request);
         if ($request->filled('search')) {
-            $query->where('product_name', 'like', '%' . $request->search . '%');
+            $query->where('product_name', 'ilike', '%' . $request->search . '%');
         }
         if ($request->filled('status')) {
             $query->where('status', $request->status);
@@ -160,26 +160,25 @@ class ExportController extends Controller
     // ──────── Waste Logs ────────
     public function wasteLogs(Request $request)
     {
-        $query = ProductAuditLog::with('user')->where('action', 'LIKE', 'Wasted%')->latest();
+        $query = ProductAuditLog::with('user')->where('action', 'ILIKE', 'Wasted%')->latest();
         $this->applyDateRange($query, $request);
         if ($request->filled('search')) {
-            $query->where('product_name', 'like', '%' . $request->search . '%');
+            $query->where('product_name', 'ilike', '%' . $request->search . '%');
         }
         $rows = $query->get();
 
-        return response()->streamDownload(function () use ($title, $dateLabel, $headers, $data) {
-            $handle = fopen('php://output', 'w');
-            fprintf($handle, chr(0xEF) . chr(0xBB) . chr(0xBF));
-            fputcsv($handle, [$title]);
-            fputcsv($handle, [$dateLabel]);
-            fputcsv($handle, ['Generated: ' . now()->format('m/d/Y h:i A')]);
-            fputcsv($handle, []);
-            fputcsv($handle, $headers);
-            foreach ($data as $row) fputcsv($handle, $row);
-            fputcsv($handle, []);
-            fputcsv($handle, ['Total Records: ' . count($data)]);
-            fclose($handle);
-        }, $fullFilename, ['Content-Type' => 'text/csv; charset=UTF-8']);
+        return $this->streamCsv('Waste Logs', $request,
+            ['Product Name', 'Wasted Amount and Reason', 'Date & Time', 'Reported By'],
+            $rows->map(function ($log) {
+                return [
+                    $log->product_name,
+                    str_replace('Wasted ', '', $log->action),
+                    $log->created_at->format('m/d/Y h:i A'),
+                    $log->user ? $log->user->first_name . ' ' . $log->user->last_name : 'System',
+                ];
+            })->toArray(),
+            'waste-logs'
+        );
     }
 
     // ──────── Cost & Variance Report ────────

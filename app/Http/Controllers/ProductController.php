@@ -15,7 +15,7 @@ class ProductController extends Controller
         $query = Product::with('recipes');
 
         if ($search) {
-            $query->where('name', 'LIKE', "%{$search}%");
+            $query->where('name', 'ILIKE', "%{$search}%");
         }
 
         if ($category && strtolower($category) !== 'all') {

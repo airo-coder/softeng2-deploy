@@ -20,7 +20,7 @@ class POSController extends Controller
                 $query->where('category', $category);
             })
             ->when($search, function ($query) use ($search) {
-                $query->where('name', 'like', "%{$search}%");
+                $query->where('name', 'ilike', "%{$search}%");
             })
             ->orderBy('category')
             ->orderBy('name')
@@ -72,7 +72,7 @@ class POSController extends Controller
 
             // Generate order ID: P-YYYYMMDD-NNNN
             $today = now()->format('Ymd');
-            $lastOrder = Transaction::where('order_id', 'like', "P-{$today}-%")
+            $lastOrder = Transaction::where('order_id', 'ilike', "P-{$today}-%")
                 ->orderBy('id', 'desc')
                 ->first();
             $nextNum = $lastOrder
@@ -123,7 +123,7 @@ class POSController extends Controller
         $query = Transaction::with(['items', 'user'])->latest();
 
         if ($request->filled('search')) {
-            $query->where('order_id', 'like', '%' . $request->search . '%');
+            $query->where('order_id', 'ilike', '%' . $request->search . '%');
         }
         if ($request->filled('date')) {
             $query->whereDate('created_at', $request->date);
