@@ -110,7 +110,7 @@
                                 </div>
                             </td>
                             </td>
-                            <td>{{ ucfirst($product->category) }}</td>
+                            <td>{{ ucwords(str_replace('_', ' ', $product->category)) }}</td>
                             <td style="font-weight: 700; color: {{ $product->stock <= 0 ? '#d63031' : ($product->stock <= 5 ? '#e17055' : '#2d3436') }}">
                                 {{ $product->stock }}
                             </td>
